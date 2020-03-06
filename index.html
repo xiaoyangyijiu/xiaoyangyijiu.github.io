@@ -150,6 +150,108 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-AV-Foundation开发秘籍学习-一-AVFoundation入门" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B8%80-AVFoundation%E5%85%A5%E9%97%A8/">AV Foundation开发秘籍学习(一) AVFoundation入门</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B8%80-AVFoundation%E5%85%A5%E9%97%A8/" class="archive-article-date">
+  	<time datetime="2020-03-06T00:22:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>架构  </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">      iOS                       Mac OS X</span><br><span class="line"></span><br><span class="line">---------------------------------------------------</span><br><span class="line">     AVKit          |            AVKit</span><br><span class="line">     UIKit          |            AppKit</span><br><span class="line">----------------------------------------------------</span><br><span class="line"></span><br><span class="line">         AVFoundation (音频专用类)</span><br><span class="line">        </span><br><span class="line">Core Audio |  Core Video |  Core Media |  Core Animation</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>采样：将模拟信号转换成我们能够存储并传输的数字信号的过程(模拟-数字转换过程)，称为采样(Sampling) </li>
+<li>音频进行时间采样</li>
+<li>图片进行空间采样</li>
+<li>视频进行时间+空间采样</li>
+</ul>
+<ul>
+<li>赫兹：1Hz = 1个振幅/s</li>
+</ul>
+<ul>
+<li>尼奎斯特频率：该频率为需要采样对象的最高频率的两倍。当采用尼奎斯特频率进行采样时，可以获得较好的数字化效果</li>
+</ul>
+<ul>
+<li>色彩的二次采样YUV：图片的所有细节都保存在亮度通道(Y)中，而人眼对亮度的敏感度要高于颜色，因此可以大幅减少存储在每个像素中颜色通道(UV)中的信息而不至于图片质量严重受损。</li>
+<li>视频编解码器ProRes 及 H.264(限iOS)</li>
+<li>音频编解码器AAC</li>
+<li>容器格式：QuickTime、MPEG-4</li>
+</ul>
+<ul>
+<li>第一章的示例为合成器</li>
+</ul>
+<p>核心代码  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">AVSpeechUtterance *utterance &#x3D;</span><br><span class="line">    [[AVSpeechUtterance alloc] initWithString:self.speechStrings[i]];</span><br><span class="line">utterance.voice &#x3D; [AVSpeechSynthesisVoice voiceWithLanguage:@&quot;en-US&quot;];</span><br><span class="line">utterance.rate &#x3D; 0.5f;</span><br><span class="line">utterance.pitchMultiplier &#x3D; 0.8f;</span><br><span class="line">utterance.postUtteranceDelay &#x3D; 0.1f;</span><br><span class="line"></span><br><span class="line">AVSpeechSynthesizer *synthesizer &#x3D; [[AVSpeechSynthesizer alloc] init];</span><br><span class="line"></span><br><span class="line">[synthesizer speakUtterance:utterance];</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">iOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B8%80-AVFoundation%E5%85%A5%E9%97%A8/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-一花一世界" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -310,6 +412,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">iOS</a>
               </li>
             
             <div class="clearfix"></div>
