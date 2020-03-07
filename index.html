@@ -57,6 +57,8 @@
 	        
 				<li><a href="/tags/iOS/">iOS</a></li>
 	        
+				<li><a href="/tags/%E8%AF%BB%E4%B9%A6/">有颜如玉</a></li>
+	        
 				<li><a href="/tags/%E9%9A%8F%E7%AC%94/">生活随笔</a></li>
 	        
 			</ul>
@@ -105,6 +107,8 @@
 			
 				
 			
+				
+			
 			
 			
 			<nav class="header-nav">
@@ -117,11 +121,13 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 33.333333333333336%"><a href="/">主页</a></li>
+					<li style="width: 25%"><a href="/">主页</a></li>
 		        
-					<li style="width: 33.333333333333336%"><a href="/tags/iOS/">iOS</a></li>
+					<li style="width: 25%"><a href="/tags/iOS/">iOS</a></li>
 		        
-					<li style="width: 33.333333333333336%"><a href="/tags/%E9%9A%8F%E7%AC%94/">生活随笔</a></li>
+					<li style="width: 25%"><a href="/tags/%E8%AF%BB%E4%B9%A6/">有颜如玉</a></li>
+		        
+					<li style="width: 25%"><a href="/tags/%E9%9A%8F%E7%AC%94/">生活随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -159,81 +165,12 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="一、音频的播放"><a href="#一、音频的播放" class="headerlink" title="一、音频的播放"></a>一、音频的播放</h1><h3 id="1-让音频播放总共分3步"><a href="#1-让音频播放总共分3步" class="headerlink" title="1.让音频播放总共分3步"></a>1.让音频播放总共分3步</h3><ul>
-<li><p>配置会话(非必要)    </p>
-</li>
-<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">AVAudioSession *session &#x3D; [AVAudioSession sharedInstance];</span><br><span class="line">&#x2F;&#x2F;播放而言，AVAudioSessionCategoryPlayback就比较合适了，可以后台播放</span><br><span class="line">[session setCategory:AVAudioSessionCategoryPlayback error:nil];</span><br><span class="line"></span><br><span class="line">[session setActive:YES error:nil]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建Player实例  </p>
-</li>
+<li>配置会话(非必要)    </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">NSURL *fileName &#x3D; [[NSBundle mainBundle] URLForResource:realName withExtension:type];</span><br><span class="line">self.audioPlayer &#x3D; [[AVAudioPlayer alloc] initWithContentsOfURL:fileName error:nil];</span><br><span class="line">self.audioPlayer.pan &#x3D; self.audioPan;  &#x2F;&#x2F;立体声</span><br><span class="line">self.audioPlayer.enableRate &#x3D; YES;</span><br><span class="line">self.audioPlayer.rate &#x3D; 2;             &#x2F;&#x2F;0.5~2倍速开启新世界</span><br><span class="line">self.audioPlayer.volume &#x3D; 1;           &#x2F;&#x2F; 0.0~1.0</span><br><span class="line">self.audioPlayer.numberOfLoops &#x3D; -1;   &#x2F;&#x2F;-1无限循环</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>播放</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[self.audioPlayer play];</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>处理细节</li>
-</ul>
-<p>++a.令锁屏后可以播放++    </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">项目info.plist </span><br><span class="line">key:Required background modes 新增item  </span><br><span class="line">App plays audio or streams audio&#x2F;video using AirPlay</span><br></pre></td></tr></table></figure>
-
-<p>++b.用通知的方式处理 ①外部中断 @线路切换++  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">NSNotificationCenter *nsnc &#x3D; [NSNotificationCenter defaultCenter];</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;注册中断通知</span><br><span class="line">[nsnc addObserver:self selector:@selector(hanleInterruption:) name:AVAudioSessionInterruptionNotification object:[AVAudioSession sharedInstance]];</span><br><span class="line"> </span><br><span class="line">&#x2F;&#x2F;注册线路切换通知</span><br><span class="line">[nsnc addObserver:self selector:@selector(hanleRouteChange:) name:AVAudioSessionRouteChangeNotification object:[AVAudioSession sharedInstance]];</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">- (void)hanleInterruption:(NSNotification *)notification &#123;</span><br><span class="line">    &#x2F;&#x2F;处理播放状态下被打断时的处理，已经打断事件结束后的续播</span><br><span class="line">    NSDictionary *info &#x3D; notification.userInfo;</span><br><span class="line">    AVAudioSessionInterruptionType type &#x3D; [info[AVAudioSessionInterruptionTypeKey] unsignedIntValue];</span><br><span class="line">    if (type &#x3D;&#x3D; AVAudioSessionInterruptionTypeBegan) &#123;</span><br><span class="line">        &#x2F;&#x2F;打断开始</span><br><span class="line">        [self pauseAudioPlayer];</span><br><span class="line">        if (self.delegate) &#123;</span><br><span class="line">            [self.delegate audioPlayerPaused];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;else &#123;</span><br><span class="line">        &#x2F;&#x2F;恢复播放</span><br><span class="line">        AVAudioSessionInterruptionOptions options &#x3D; [info[AVAudioSessionInterruptionOptionKey] unsignedIntValue];</span><br><span class="line">        if (options &#x3D;&#x3D; AVAudioSessionInterruptionOptionShouldResume) &#123;</span><br><span class="line">            [self playAudioPlayer];</span><br><span class="line">            if (self.delegate) &#123;</span><br><span class="line">                [self.delegate audioPlayerBegan];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)hanleRouteChange:(NSNotification *)notification &#123;</span><br><span class="line">    &#x2F;&#x2F;处理拔掉耳机后，音乐仍然播放的问题</span><br><span class="line">    NSDictionary *info &#x3D; notification.userInfo;</span><br><span class="line">    AVAudioSessionRouteChangeReason reason &#x3D; [info[AVAudioSessionRouteChangeReasonKey] unsignedIntValue];</span><br><span class="line">    if (reason &#x3D;&#x3D; AVAudioSessionRouteChangeReasonOldDeviceUnavailable) &#123;</span><br><span class="line">        AVAudioSessionRouteDescription *previousRoute &#x3D; info[AVAudioSessionRouteChangePreviousRouteKey];</span><br><span class="line">        AVAudioSessionPortDescription *previousOutput &#x3D; previousRoute.outputs[0];</span><br><span class="line">        NSString *portType &#x3D; previousOutput.portType;</span><br><span class="line">        </span><br><span class="line">        if ([portType isEqualToString:AVAudioSessionPortHeadphones]) &#123;</span><br><span class="line">            </span><br><span class="line">            &#x2F;&#x2F;暂停而非停止</span><br><span class="line">            [self pauseAudioPlayer];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="2-tips"><a href="#2-tips" class="headerlink" title="2.tips"></a>2.tips</h3><ul>
-<li>player 调用stop方法会撤销调用prepareToPlay时做的设置，而调用pause不会。无论是stop还是pause之后，再play，还是会续播的！！</li>
-</ul>
-<h1 id="二、音频的录制"><a href="#二、音频的录制" class="headerlink" title="二、音频的录制"></a>二、音频的录制</h1><h3 id="1-录制音频总共分4步"><a href="#1-录制音频总共分4步" class="headerlink" title="1.录制音频总共分4步"></a>1.录制音频总共分4步</h3><ul>
-<li>麦克风权限  </li>
-</ul>
-<p>Privacy | Microphone settings 老子想用你的麦克风，就问你行不行？ </p>
-<ul>
-<li><p>配置会话-默认的会话没有录制能力</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    AVAudioSession *session &#x3D; [AVAudioSession sharedInstance];</span><br><span class="line"></span><br><span class="line">    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];</span><br><span class="line">    </span><br><span class="line">    [session setActive:YES error:nil]</span><br><span class="line">&#96;&#96;&#96;  </span><br><span class="line"></span><br><span class="line">- 创建Recorder实例</span><br></pre></td></tr></table></figure>
-<p>  NSString *tempStr = NSTemporaryDirectory();<br>  //注意后缀名要和初始化的settings里的AVFormatIDKey保持一致<br>  NSString *filePath = [tempStr stringByAppendingPathComponent:@”record_temp.pcm”];<br>  NSURL *fileURL = [NSURL fileURLWithPath:filePath];<br>  self.audioRecorder = [[AVAudioRecorder alloc] initWithURL:fileURL settings:【settings字典】 error:nil];</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">配置字典的内容</span><br></pre></td></tr></table></figure>
-<p> self.audioSettings = @{</p>
-<pre><code>AVFormatIDKey:[NSNumber numberWithInt:kAudioFormatLinearPCM], // 编码格式
-   AVSampleRateKey:[NSNumber numberWithFloat:16000.0], //声音采样率
-   AVLinearPCMBitDepthKey:[NSNumber numberWithInt:16], // 16Bit
-   AVNumberOfChannelsKey:[NSNumber numberWithInt:1], // 采集音轨 不接外部硬件的话，都应该是1！！！
-   AVEncoderAudioQualityKey:[NSNumber numberWithInt:AVAudioQualityMax], // 音频质量</code></pre><p>  };</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 录制  </span><br><span class="line"></span><br><span class="line">record 录制   </span><br><span class="line">pause  暂停  </span><br><span class="line">stop   停止</span><br><span class="line"> </span><br><span class="line">### 2.tips </span><br><span class="line"></span><br><span class="line">- 字符串格式化 @&quot;%02i:%02i:%02i&quot; 格出来的是 12:03:01 这样的，想当好用  </span><br><span class="line">- 虽然你可能经常在AVFoundation中使用KVO，但在AVAudioRecorder和Player中是不能使用的，因为currentTime属性是不可见的。因此若想实时拿到currentTime,就得用时间片轮询的方式去更新UI</span><br><span class="line"></span><br><span class="line"># 三、音量反馈 Audio Metering  </span><br><span class="line"></span><br><span class="line">### 1.要使用音量反馈，分以下2步  </span><br><span class="line"></span><br><span class="line">- 开启meteringEnabled</span><br></pre></td></tr></table></figure>
-<p>  _AVAudioPlayerOrRecorder.meteringEnabled = YES;</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">- 在获取某一时间点的音量值之前，调用updateMeters</span><br></pre></td></tr></table></figure>
-<p>[_AVAudioPlayerOrRecorder updateMeters];<br>  //然后就可以获取到实时的值了<br>float avgPower = [_audioRecorderOrPlayer averagePowerForChannel:0]; //均值<br>float peakPower = [_audioRecorderOrPlayer peakPowerForChannel:0];//峰值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 2.tips  </span><br><span class="line"></span><br><span class="line">- 可以用定时器以轮询的方式，持续获得音量统计  </span><br><span class="line">- averagePowerForChannel、peakPowerForChannel获取到的分贝值范围是[-160db, 0db]。-160静音，0最大分贝，所以最佳实践是设计一个转换方法将这个范围转换成[0.0, 1.0]间的值，这样既符合直观理解，也方便按比例画图。教材中的转换方法不好理解，我给出我的实现:</span><br></pre></td></tr></table></figure>
-<p>// 这个方法大体与教材一致 传入分贝，然后从实现计算好的_meterTable中取值<br>// 索引通过getIndexByPower来计算<br>/// 将传入的分贝转换成[0.0, 1.0]间的数值<br>/// @param power 分贝数</p>
-</li>
-<li><p>(float)valueForPower:(float)power {</p>
-<p>  if (power &lt; self.minDB) {</p>
-<pre><code>return 0.0f;</code></pre><p>  } else if (power &gt;= 0.0f){</p>
-<pre><code>return 1.0f;</code></pre><p>  } else {</p>
-<pre><code>//获取分贝数对应的索引
-int index = [self getIndexByPower:power];
-return [_meterTable[index] floatValue];</code></pre><p>  }<br>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">然后就是计算并构建出一个映射字典了</span><br></pre></td></tr></table></figure>
-<p>//构造分贝映射数组_meterTable</p>
-</li>
-<li><p>(void)calculateMeterTable{</p>
-<p>  _meterTable = [NSMutableArray arrayWithCapacity:self.meterTableCount];</p>
-<p>  //欲将 -60 ~ 0 的数据分成 300份  _minDB预设为-60<br>  _step = (0 - _minDB) / (_meterTableCount);//步长0.2 _meterTableCount 预设300<br>  float uprise = 1.0 / (_meterTableCount-1); //增长率</p>
-<p>  for (int i = 0; i &lt; _meterTableCount; i++) {</p>
-<pre><code>_meterTable[i] = @(i * uprise);</code></pre><p>  }<br>  VNLog(@”分贝线性转换数组:%@”,_meterTable);</p>
-</li>
-</ul>
-<p>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>//通过分贝计算该分贝位于_meterTable中的索引</p>
-<ul>
-<li>(int)getIndexByPower:(float)power {<br>  return (int)((power - _minDB)/_step);<br>}</li>
-</ul>
-<p>```</p>
-
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">AVAudioSession *session &#x3D; [AVAudioSession sharedInstance];</span><br><span class="line">&#x2F;&#x2F;播放而言，AVAudioSessionCategoryPlayback就比较合适了，可以后台播放</span><br><span class="line">[session setCategory:AVAudioSessionCategoryPlayback error:nil];</span><br><span class="line"></span><br><span class="line">[session setActive:YES error:nil]</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2020/03/07/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%BA%8C-%E6%92%AD%E6%94%BE%E5%92%8C%E5%BD%95%E5%88%B6%E9%9F%B3%E9%A2%91/#more">more >></a>
+        
       
 
       
@@ -241,6 +178,17 @@ return [_meterTable[index] floatValue];</code></pre><p>  }<br>}</p>
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">iOS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -296,7 +244,7 @@ return [_meterTable[index] floatValue];</code></pre><p>  }<br>}</p>
     <div class="article-entry" itemprop="articleBody">
       
         <hr>
-<p>title: 那不勒斯四部曲读后感<br>date: 2020-03-07 12:42:19<br>tags: [有颜如玉, 随笔]<br>description: 女人，远比女人自己了解的更复杂</p>
+<p>title: 那不勒斯四部曲读后感<br>date: 2020-03-07 12:42:19<br>tags: 读书, 随笔<br>description: 女人，远比女人自己了解的更复杂</p>
 <hr>
 <p>　　“女人，远比女人自己了解的更复杂”  </p>
 <p>　　读完这部长篇后，我妄下了上面的定论。人和人，甚至不同时期的同一个人，对思想的认知是有差异的，于是，为了不让将来的我嘲笑现在的我，我决定修改上面那句话为：  </p>
