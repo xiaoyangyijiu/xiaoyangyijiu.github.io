@@ -6,14 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: 观影 | 紫夜先生的博客</title>
+  <title>AV-Foundation开发秘籍学习(四)视频播放 | 紫夜先生的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="紫夜先生的博客">
-<meta property="og:url" content="http://yoursite.com/tags/%E8%A7%82%E5%BD%B1/index.html">
+  <meta name="description" content="零、CMTime的转换在媒体播放的世界里，一向有精度的要求，而我们平时在开发中使用的单位一般是NSTimeInterval，而浮点数的运算，是存在精度损失的，对于视频播放、控制而言，是一种灾难，教材中介绍的比较简单，这里搜索资料，做个总结：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AV-Foundation开发秘籍学习(四)视频播放">
+<meta property="og:url" content="http://yoursite.com/2020/03/28/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/index.html">
 <meta property="og:site_name" content="紫夜先生的博客">
+<meta property="og:description" content="零、CMTime的转换在媒体播放的世界里，一向有精度的要求，而我们平时在开发中使用的单位一般是NSTimeInterval，而浮点数的运算，是存在精度损失的，对于视频播放、控制而言，是一种灾难，教材中介绍的比较简单，这里搜索资料，做个总结：">
 <meta property="og:locale" content="cn">
+<meta property="article:published_time" content="2020-03-28T01:30:34.000Z">
+<meta property="article:modified_time" content="2020-03-28T01:35:47.682Z">
 <meta property="article:author" content="紫夜先生的博客">
+<meta property="article:tag" content="iOS">
+<meta property="article:tag" content="开发技术">
+<meta property="article:tag" content="AV Foundation">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="紫夜先生的博客" type="application/atom+xml">
@@ -142,64 +149,340 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-AV-Foundation开发秘籍学习-四-视频播放" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/03/15/%E5%8A%A8%E7%89%A9%E7%AE%A1%E7%90%86%E5%B1%80%E8%A7%82%E5%90%8E%E6%84%9F/" class="archive-article-date">
-  	<time datetime="2020-03-15T10:46:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-15</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/03/15/%E5%8A%A8%E7%89%A9%E7%AE%A1%E7%90%86%E5%B1%80%E8%A7%82%E5%90%8E%E6%84%9F/">动物管理局观后感</a>
+    <h1 class="article-title" itemprop="name">
+      AV-Foundation开发秘籍学习(四)视频播放
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2020/03/28/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/" class="archive-article-date">
+  	<time datetime="2020-03-28T01:30:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="零、CMTime的转换"><a href="#零、CMTime的转换" class="headerlink" title="零、CMTime的转换"></a>零、CMTime的转换</h1><p>在媒体播放的世界里，一向有精度的要求，而我们平时在开发中使用的单位一般是<code>NSTimeInterval</code>，而浮点数的运算，是存在精度损失的，对于视频播放、控制而言，是一种灾难，教材中介绍的比较简单，这里搜索资料，做个总结：  </p>
+<a id="more"></a>  
+
+<h3 id="1-CMTime的定义"><a href="#1-CMTime的定义" class="headerlink" title="1.CMTime的定义"></a>1.CMTime的定义</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">typedef struct</span><br><span class="line">&#123;</span><br><span class="line">	CMTimeValue	value;		&#x2F;*! @field value The value of the CMTime. value&#x2F;timescale &#x3D; seconds. *&#x2F;</span><br><span class="line">	CMTimeScale	timescale;	&#x2F;*! @field timescale The timescale of the CMTime. value&#x2F;timescale &#x3D; seconds.  *&#x2F;</span><br><span class="line">	CMTimeFlags	flags;		&#x2F;*! @field flags The flags, eg. kCMTimeFlags_Valid, kCMTimeFlags_PositiveInfinity, etc. *&#x2F;</span><br><span class="line">	CMTimeEpoch	epoch;		&#x2F;*! @field epoch Differentiates between equal timestamps that are actually different because</span><br><span class="line">												 of looping, multi-item sequencing, etc.  </span><br><span class="line">												 Will be used during comparison: greater epochs happen after lesser ones. </span><br><span class="line">												 Additions&#x2F;subtraction is only possible within a single epoch,</span><br><span class="line">												 however, since epoch length may be unknown&#x2F;variable. *&#x2F;</span><br><span class="line">&#125; CMTime</span><br></pre></td></tr></table></figure>
+
+<p>该结构体常用的就俩值，一个<code>value</code>一个<code>timescale</code>。因此围绕构造CMTime的时候出现了衍生： </p>
+<h3 id="2-CMTime的使用"><a href="#2-CMTime的使用" class="headerlink" title="2.CMTime的使用"></a>2.CMTime的使用</h3><ul>
+<li>通过帧数构造</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">    CMTime a &#x3D; CMTimeMake(1, 2);</span><br><span class="line">&#96;&#96;&#96;  </span><br><span class="line">这行代码的意思就是我想创建个0.5s的CMTime, value表示当前第1帧，timescale表示每秒钟有2帧，所以播放到当前帧就需要消耗0.5s。</span><br></pre></td></tr></table></figure>
+<pre><code>CMTime b = CMTimeMake(100, 44100);</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">同理，对于一个 44.1 kHz 的视频， b就是播放到第100帧的时候，消耗的时间</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- 通过NSTimeInterval构造  </span><br><span class="line"></span><br><span class="line">一般情况下，纠结于到底是播放1000帧的时间，还是1001帧的时间，似乎没有意义，我们更习惯于用s表达，于是出现了</span><br></pre></td></tr></table></figure>
+<pre><code>CMTime c = CMTimeMakeWithSeconds(0.5, 10);</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">与上面的CMTimeMake区别在于，CMTimeMakeWithSeconds的第一个参数接收的是float而非int(当然含义也不同)，上面代码就表示我想要个0.5s的时间，后面的参数表示的是每秒分割的“切片”(帧数)，就是步长，制约第一个参数，就是说在1s中可以分10份的情况下，我来个0.5s，也就是可以执行5帧的样子，为了理解举个反例：</span><br></pre></td></tr></table></figure>
+<pre><code>CMTime d = CMTimeMakeWithSeconds(0.5, 1);</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1s中就能分成1份(帧)，你要执行0.5s是几个意思？就这点时间你一帧都执行不到，因此d最后是0。一次我们可以得到下面公式：</span><br></pre></td></tr></table></figure>
+<p>我们定义 frame = 1秒钟执行1帧消耗的时间 = 1/preferredTimescale</p>
+<p>使用CMTimeMakeWithSeconds时<br>    需 seconds  &gt;= frame<br>    且 实际得到时间 = [second /  frame]   *   frame<br>    * []向下取整</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- CMTime转NSTimeInterval  </span><br><span class="line"></span><br><span class="line">简单粗暴：</span><br></pre></td></tr></table></figure>
+<pre><code>NSTimeInterval e = CMTimeGetSeconds(d);</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 一、视频的播放</span><br><span class="line"> </span><br><span class="line">视频播放和展示是两码事儿。  </span><br><span class="line"></span><br><span class="line">因此想看片要分下面几步：  </span><br><span class="line"></span><br><span class="line">### 1.修心 —— 拿到视频资源</span><br></pre></td></tr></table></figure>
+<pre><code>_asset = [AVAsset assetWithURL:path];</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 2.养性 —— 掌握视频资源的一切</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">我们起码得知道资源的持续时间，必要的媒体信息及字幕音轨之类的吧，而加载视频资源是一个异步的操作，由于AVFoundation的特性，因此需要进行监听，一旦加载好了资源，那就从资源里读信息准备搞事情</span><br></pre></td></tr></table></figure>
+<pre><code>NSArray *keys = @[@&quot;tracks&quot;,@&quot;duration&quot;,@&quot;commonMetadata&quot;,@&quot;availableMediaCharacteristicsWithMediaSelectionOptions&quot;];
+
+self.playerItem = [AVPlayerItem playerItemWithAsset:_asset automaticallyLoadedAssetKeys:keys];
+
+[self.playerItem addObserver:self forKeyPath:@&quot;status&quot; options:0 context:&amp;PlayerItemStatusContext];</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary&lt;NSKeyValueChangeKey,id&gt; *)change context:(void *)context {</p>
+<p>  if (context == &amp;PlayerItemStatusContext) {</p>
+<pre><code>dispatch_async(dispatch_get_main_queue(), ^{
+    AVPlayerItem *playerItem = (AVPlayerItem *)object;
+    //移除KVO - 提上裤子不认账
+    [playerItem removeObserver:self forKeyPath:keyPath context:context];
+
+    if (playerItem.status == AVPlayerItemStatusReadyToPlay) {
+        if (self.readyPlayblock) {                    self.readyPlayblock(CMTimeGetSeconds(playerItem.duration), self-&gt;_asset.title ? self-&gt;_asset.title : self-&gt;_fileName);
+        }
+    }
+});</code></pre><p>  }<br>}</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 3.齐冠 —— 把自己展示给世界</span><br><span class="line"></span><br><span class="line">人靠衣裳马靠鞍，视频终归是给人看的，而playerItem本身是没有view，因此搞出了AVPlayer，AVPlayer有个弟弟，可以拿到它的layer层，把layer层扔到我们展示区域的视图的layer上就可以了</span><br></pre></td></tr></table></figure>
+<pre><code>self.videoPlayer = [AVPlayer playerWithPlayerItem:self.playerItem];
+
+AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
+
+[view.layer addSublayer:playerLayer];</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 二、播放的控制</span><br><span class="line"></span><br><span class="line">AVPlayer这个玩意主要还是处理播放控制的</span><br><span class="line"></span><br><span class="line">### 1.播放与暂停</span><br></pre></td></tr></table></figure>
+<pre><code>[self.videoPlayer play];
+[self.videoPlayer pause];</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 2.倍速发现新世界</span><br></pre></td></tr></table></figure>
+<pre><code>[self.videoPlayer setRate:0.0f];</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 3.跳到指定时间播放</span><br></pre></td></tr></table></figure>
+<p>  [self.videoPlayer seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) completionHandler:^(BOOL finished) {<br>    //搞事情<br>    }];</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 4.监听播放进度与播放结束</span><br><span class="line"></span><br><span class="line">- 播放进度</span><br></pre></td></tr></table></figure>
+<p>   CMTime intervalCM = CMTimeMakeWithSeconds(interval, NSEC_PER_SEC);<br>    weak(self)<br>    _timeObserver = [self.videoPlayer addPeriodicTimeObserverForInterval:intervalCM queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {<br>        NSTimeInterval currentTime = CMTimeGetSeconds(time);<br>        NSTimeInterval duration = CMTimeGetSeconds(weak_self.playerItem.duration);<br>        //拿到了当前时间，及总时间<br>    }];</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 播放结束</span><br></pre></td></tr></table></figure>
+<pre><code>weak(self)
+_endTimeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:AVPlayerItemDidPlayToEndTimeNotification object:self.playerItem queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+   //播放完了可以调到开始
+    [weak_self.videoPlayer seekToTime:kCMTimeZero completionHandler:^(BOOL finished) {
+        block();
+    }];
+
+}];</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 选择字幕&#x2F;音轨  </span><br><span class="line"></span><br><span class="line">在视频加载完毕后，可以读取字幕、音轨资源</span><br></pre></td></tr></table></figure>
+<p>可以在 第一节第2小节的KVC监听里执行</p>
+<ul>
+<li><p>(void)loadMediaOption:(void (^) (NSMutableArray *legibles, NSMutableArray *audibles)) getCompleteBlock {</p>
+<p>  NSArray *mediaCharacteristics = _asset.availableMediaCharacteristicsWithMediaSelectionOptions;</p>
+<p>  NSString *legible = @”AVMediaCharacteristicLegible”;<br>  NSString *audible = @”AVMediaCharacteristicAudible”;<br>  NSMutableArray *legibleArray = [NSMutableArray array];<br>  NSMutableArray *audibleArray = [NSMutableArray array];</p>
+<p>  for (NSString *characteristic in mediaCharacteristics) {</p>
+<pre><code>AVMediaSelectionGroup *group = [_asset mediaSelectionGroupForMediaCharacteristic:characteristic];</code></pre></li>
+</ul>
+<pre><code>    for (AVMediaSelectionOption *option in group.options) {
+
+        if ([characteristic isEqualToString:legible]) {
+            [legibleArray addObject:option.displayName];
+        }else if ([characteristic isEqualToString:audible]) {
+            [audibleArray addObject:option.displayName];
+        }
+    }
+}
+if (getCompleteBlock) {
+    getCompleteBlock(legibleArray,audibleArray);
+}</code></pre><p>}</p>
+<p>//根据loadMediaOption中拿到的字幕名称，进行选择设置</p>
+<ul>
+<li><p>(void)selectLegible:(NSString *)legible {</p>
+<p>  AVMediaSelectionGroup *group = [_asset mediaSelectionGroupForMediaCharacteristic:@”AVMediaCharacteristicLegible”];</p>
+<p>  BOOL selected = NO;<br>  for (AVMediaSelectionOption *option in group.options) {</p>
+<pre><code>if ([option.displayName isEqualToString:legible]) {
+    [self.playerItem selectMediaOption:option inMediaSelectionGroup:group];
+    selected = YES;
+    break;
+}</code></pre><p>  }<br>  if (!selected) {</p>
+<pre><code>[self.playerItem selectMediaOption:nil inMediaSelectionGroup:group];</code></pre><p>  }</p>
+</li>
+</ul>
+<p>}<br>//根据loadMediaOption中拿到的音轨名称，进行选择设置</p>
+<ul>
+<li><p>(void)selectAudible:(NSString *)audible {</p>
+<p>  AVMediaSelectionGroup *group = [_asset mediaSelectionGroupForMediaCharacteristic:@”AVMediaCharacteristicAudible”];</p>
+<p>  BOOL selected = NO;<br>  for (AVMediaSelectionOption *option in group.options) {</p>
+<pre><code>if ([option.displayName isEqualToString:audible]) {
+    [self.playerItem selectMediaOption:option inMediaSelectionGroup:group];
+    selected = YES;
+    break;
+}</code></pre><p>  }<br>  if (!selected) {</p>
+<pre><code>[self.playerItem selectMediaOption:nil inMediaSelectionGroup:group];</code></pre><p>  }</p>
+</li>
+</ul>
+<p>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"># 三、视频快照的生成</span><br><span class="line"></span><br><span class="line">生成快照有两种方式:  </span><br><span class="line"></span><br><span class="line">### 1.在指定时间生成</span><br></pre></td></tr></table></figure>
+<pre><code>self.imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:_asset];
+CGImageRef ref = [self.imageGenerator copyCGImageAtTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) actualTime:nil error:nil];
+UIImage *image = [UIImage imageWithCGImage:ref];//拿到图片</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 2.根据时间点序列生成快照序列</span><br></pre></td></tr></table></figure>
+<pre><code>self.imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:_asset];
+self.imageGenerator.maximumSize = CGSizeMake(width, 0);//限定宽。高度自适应
+
+// 根据NSNumber的时间数组 构造NSValue时间数组
+NSMutableArray *valueTimes = [NSMutableArray array];
+for (NSNumber *n in times) {
+     CMTime nCM = CMTimeMakeWithSeconds(n.floatValue, NSEC_PER_SEC);
+    [valueTimes addObject:[NSValue valueWithCMTime:nCM]];
+}
+
+__block NSUInteger imageCount = valueTimes.count;
+__block NSMutableArray *images = [NSMutableArray array];
+[self.imageGenerator generateCGImagesAsynchronouslyForTimes:valueTimes completionHandler:^(CMTime requestedTime, CGImageRef  _Nullable image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError * _Nullable error) {
+    //每生成一张，便执行该回调
+    if (result == AVAssetImageGeneratorSucceeded) {
+        VNLog(@&quot;请求的快照时间:%f&quot;,CMTimeGetSeconds(requestedTime));
+        VNLog(@&quot;实际的生成时间：%f&quot;,CMTimeGetSeconds(actualTime));
+        UIImage *imageR = [UIImage imageWithCGImage:image];
+        [images addObject:imageR];
+    }
+
+    if (--imageCount == 0) {
+        if (completeBlock) {
+            completeBlock(images);
+        }
+    }
+
+}];</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 四、AirPlay的坑</span><br><span class="line"></span><br><span class="line">教材中介绍的AirPlay很简单，MPVolumeView，这个不大好用</span><br></pre></td></tr></table></figure>
+<pre><code>self.airPlayView = [[MPVolumeView alloc] init];
+self.airPlayView.showsVolumeSlider = NO;
+self.airPlayView.showsRouteButton = YES;</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">然后就可以把airPlayView添加到view上了。实践发现没法监听和操作视频的结束，看API，通知都废弃了，网上搜了下，发现iOS11新出了AVRoutePickerView，试了下效果拔群。</span><br></pre></td></tr></table></figure>
+<pre><code>self.airPlayViewUp11 = [[AVRoutePickerView alloc]initWithFrame:CGRectMake(100, 100, 60, 60)];
+//活跃状态颜色
+self.airPlayViewUp11.activeTintColor = [UIColor redColor];
+//设置代理
+self.airPlayViewUp11.delegate = self;</code></pre><p>```</p>
+<p>AirPlay可研究的地方太多了，后面需要花时间集中研究下。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://raw.githubusercontent.com/xiaoyangyijiu/PictureBed/master/blogImg/AliPayIcon.JPG">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://raw.githubusercontent.com/xiaoyangyijiu/PictureBed/master/blogImg/WeChatPayIcon.JPG">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">iOS</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">观影</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">开发技术</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">AV Foundation</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/03/28/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2020/03/28/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%BA%94-AV-Kit-%E7%94%A8%E6%B3%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          AV-Foundation开发秘籍学习(五)AV Kit 用法
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2020/03/28/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E8%B5%84%E6%BA%90%E5%92%8C%E5%85%83%E6%95%B0%E6%8D%AE/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">AV-Foundation开发秘籍学习(三)资源和元数据</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -222,9 +505,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
