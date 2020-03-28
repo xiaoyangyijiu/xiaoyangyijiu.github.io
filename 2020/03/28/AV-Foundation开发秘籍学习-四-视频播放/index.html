@@ -16,7 +16,7 @@
 <meta property="og:description" content="零、CMTime的转换在媒体播放的世界里，一向有精度的要求，而我们平时在开发中使用的单位一般是NSTimeInterval，而浮点数的运算，是存在精度损失的，对于视频播放、控制而言，是一种灾难，教材中介绍的比较简单，这里搜索资料，做个总结：">
 <meta property="og:locale" content="cn">
 <meta property="article:published_time" content="2020-03-28T01:30:34.000Z">
-<meta property="article:modified_time" content="2020-03-28T01:35:47.682Z">
+<meta property="article:modified_time" content="2020-03-28T01:45:36.388Z">
 <meta property="article:author" content="紫夜先生的博客">
 <meta property="article:tag" content="iOS">
 <meta property="article:tag" content="开发技术">
@@ -178,20 +178,21 @@
 <h3 id="2-CMTime的使用"><a href="#2-CMTime的使用" class="headerlink" title="2.CMTime的使用"></a>2.CMTime的使用</h3><ul>
 <li>通过帧数构造</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">    CMTime a &#x3D; CMTimeMake(1, 2);</span><br><span class="line">&#96;&#96;&#96;  </span><br><span class="line">这行代码的意思就是我想创建个0.5s的CMTime, value表示当前第1帧，timescale表示每秒钟有2帧，所以播放到当前帧就需要消耗0.5s。</span><br></pre></td></tr></table></figure>
-<pre><code>CMTime b = CMTimeMake(100, 44100);</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">同理，对于一个 44.1 kHz 的视频， b就是播放到第100帧的时候，消耗的时间</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- 通过NSTimeInterval构造  </span><br><span class="line"></span><br><span class="line">一般情况下，纠结于到底是播放1000帧的时间，还是1001帧的时间，似乎没有意义，我们更习惯于用s表达，于是出现了</span><br></pre></td></tr></table></figure>
-<pre><code>CMTime c = CMTimeMakeWithSeconds(0.5, 10);</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">与上面的CMTimeMake区别在于，CMTimeMakeWithSeconds的第一个参数接收的是float而非int(当然含义也不同)，上面代码就表示我想要个0.5s的时间，后面的参数表示的是每秒分割的“切片”(帧数)，就是步长，制约第一个参数，就是说在1s中可以分10份的情况下，我来个0.5s，也就是可以执行5帧的样子，为了理解举个反例：</span><br></pre></td></tr></table></figure>
-<pre><code>CMTime d = CMTimeMakeWithSeconds(0.5, 1);</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1s中就能分成1份(帧)，你要执行0.5s是几个意思？就这点时间你一帧都执行不到，因此d最后是0。一次我们可以得到下面公式：</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    CMTime a &#x3D; CMTimeMake(1, 2);</span><br><span class="line">&#96;&#96;&#96;    </span><br><span class="line"></span><br><span class="line">这行代码的意思就是我想创建个0.5s的CMTime, value表示当前第1帧，timescale表示每秒钟有2帧，所以播放到当前帧就需要消耗0.5s。</span><br></pre></td></tr></table></figure>
+<pre><code>CMTime b = CMTimeMake(100, 44100);</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">同理，对于一个 44.1 kHz 的视频， b就是播放到第100帧的时候，消耗的时间</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- 通过NSTimeInterval构造  </span><br><span class="line"></span><br><span class="line">一般情况下，纠结于到底是播放1000帧的时间，还是1001帧的时间，似乎没有意义，我们更习惯于用s表达，于是出现了</span><br></pre></td></tr></table></figure>
+<pre><code>CMTime c = CMTimeMakeWithSeconds(0.5, 10);</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">与上面的CMTimeMake区别在于，CMTimeMakeWithSeconds的第一个参数接收的是float而非int(当然含义也不同)，上面代码就表示我想要个0.5s的时间，后面的参数表示的是每秒分割的“切片”(帧数)，就是步长，制约第一个参数，就是说在1s中可以分10份的情况下，我来个0.5s，也就是可以执行5帧的样子，为了理解举个反例：</span><br></pre></td></tr></table></figure>
+<pre><code>CMTime d = CMTimeMakeWithSeconds(0.5, 1);</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">1s中就能分成1份(帧)，你要执行0.5s是几个意思？就这点时间你一帧都执行不到，因此d最后是0。一次我们可以得到下面公式：</span><br></pre></td></tr></table></figure>
 <p>我们定义 frame = 1秒钟执行1帧消耗的时间 = 1/preferredTimescale</p>
 <p>使用CMTimeMakeWithSeconds时<br>    需 seconds  &gt;= frame<br>    且 实际得到时间 = [second /  frame]   *   frame<br>    * []向下取整</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- CMTime转NSTimeInterval  </span><br><span class="line"></span><br><span class="line">简单粗暴：</span><br></pre></td></tr></table></figure>
-<pre><code>NSTimeInterval e = CMTimeGetSeconds(d);</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 一、视频的播放</span><br><span class="line"> </span><br><span class="line">视频播放和展示是两码事儿。  </span><br><span class="line"></span><br><span class="line">因此想看片要分下面几步：  </span><br><span class="line"></span><br><span class="line">### 1.修心 —— 拿到视频资源</span><br></pre></td></tr></table></figure>
-<pre><code>_asset = [AVAsset assetWithURL:path];</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 2.养性 —— 掌握视频资源的一切</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">我们起码得知道资源的持续时间，必要的媒体信息及字幕音轨之类的吧，而加载视频资源是一个异步的操作，由于AVFoundation的特性，因此需要进行监听，一旦加载好了资源，那就从资源里读信息准备搞事情</span><br></pre></td></tr></table></figure>
-<pre><code>NSArray *keys = @[@&quot;tracks&quot;,@&quot;duration&quot;,@&quot;commonMetadata&quot;,@&quot;availableMediaCharacteristicsWithMediaSelectionOptions&quot;];
-
-self.playerItem = [AVPlayerItem playerItemWithAsset:_asset automaticallyLoadedAssetKeys:keys];
-
-[self.playerItem addObserver:self forKeyPath:@&quot;status&quot; options:0 context:&amp;PlayerItemStatusContext];</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  </span><br><span class="line">  </span><br><span class="line">- CMTime转NSTimeInterval  </span><br><span class="line"></span><br><span class="line">简单粗暴：</span><br></pre></td></tr></table></figure>
+<p>NSTimeInterval e = CMTimeGetSeconds(d);</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">  </span><br><span class="line"># 一、视频的播放</span><br><span class="line"> </span><br><span class="line">视频播放和展示是两码事儿。  </span><br><span class="line"></span><br><span class="line">因此想看片要分下面几步：  </span><br><span class="line"></span><br><span class="line">### 1.修心 —— 拿到视频资源</span><br></pre></td></tr></table></figure>
+<p>_asset = [AVAsset assetWithURL:path];</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 2.养性 —— 掌握视频资源的一切</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">我们起码得知道资源的持续时间，必要的媒体信息及字幕音轨之类的吧，而加载视频资源是一个异步的操作，由于AVFoundation的特性，因此需要进行监听，一旦加载好了资源，那就从资源里读信息准备搞事情</span><br></pre></td></tr></table></figure>
+<p>NSArray *keys = @[@”tracks”,@”duration”,@”commonMetadata”,@”availableMediaCharacteristicsWithMediaSelectionOptions”];</p>
+<p>self.playerItem = [AVPlayerItem playerItemWithAsset:_asset automaticallyLoadedAssetKeys:keys];</p>
+<p>[self.playerItem addObserver:self forKeyPath:@”status” options:0 context:&amp;PlayerItemStatusContext];</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">下面是对监听的实现：</span><br></pre></td></tr></table></figure>
 <ul>
 <li><p>(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary&lt;NSKeyValueChangeKey,id&gt; *)change context:(void *)context {</p>
 <p>  if (context == &amp;PlayerItemStatusContext) {</p>
@@ -208,26 +209,21 @@ self.playerItem = [AVPlayerItem playerItemWithAsset:_asset automaticallyLoadedAs
 </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 3.齐冠 —— 把自己展示给世界</span><br><span class="line"></span><br><span class="line">人靠衣裳马靠鞍，视频终归是给人看的，而playerItem本身是没有view，因此搞出了AVPlayer，AVPlayer有个弟弟，可以拿到它的layer层，把layer层扔到我们展示区域的视图的layer上就可以了</span><br></pre></td></tr></table></figure>
-<pre><code>self.videoPlayer = [AVPlayer playerWithPlayerItem:self.playerItem];
-
-AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
-
-[view.layer addSublayer:playerLayer];</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 二、播放的控制</span><br><span class="line"></span><br><span class="line">AVPlayer这个玩意主要还是处理播放控制的</span><br><span class="line"></span><br><span class="line">### 1.播放与暂停</span><br></pre></td></tr></table></figure>
-<pre><code>[self.videoPlayer play];
-[self.videoPlayer pause];</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 2.倍速发现新世界</span><br></pre></td></tr></table></figure>
-<pre><code>[self.videoPlayer setRate:0.0f];</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 3.跳到指定时间播放</span><br></pre></td></tr></table></figure>
-<p>  [self.videoPlayer seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) completionHandler:^(BOOL finished) {<br>    //搞事情<br>    }];</p>
+<p>self.videoPlayer = [AVPlayer playerWithPlayerItem:self.playerItem];</p>
+<p>AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];</p>
+<p>[view.layer addSublayer:playerLayer];</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 二、播放的控制</span><br><span class="line"></span><br><span class="line">AVPlayer这个玩意主要还是处理播放控制的</span><br><span class="line"></span><br><span class="line">### 1.播放与暂停</span><br></pre></td></tr></table></figure>
+<p> [self.videoPlayer play];<br> [self.videoPlayer pause];</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 2.倍速发现新世界</span><br></pre></td></tr></table></figure>
+<p> [self.videoPlayer setRate:0.0f];</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 3.跳到指定时间播放</span><br></pre></td></tr></table></figure>
+<p>[self.videoPlayer seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) completionHandler:^(BOOL finished) {<br>    //搞事情<br>    }];</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 4.监听播放进度与播放结束</span><br><span class="line"></span><br><span class="line">- 播放进度</span><br></pre></td></tr></table></figure>
 <p>   CMTime intervalCM = CMTimeMakeWithSeconds(interval, NSEC_PER_SEC);<br>    weak(self)<br>    _timeObserver = [self.videoPlayer addPeriodicTimeObserverForInterval:intervalCM queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {<br>        NSTimeInterval currentTime = CMTimeGetSeconds(time);<br>        NSTimeInterval duration = CMTimeGetSeconds(weak_self.playerItem.duration);<br>        //拿到了当前时间，及总时间<br>    }];</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 播放结束</span><br></pre></td></tr></table></figure>
-<pre><code>weak(self)
-_endTimeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:AVPlayerItemDidPlayToEndTimeNotification object:self.playerItem queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-   //播放完了可以调到开始
-    [weak_self.videoPlayer seekToTime:kCMTimeZero completionHandler:^(BOOL finished) {
-        block();
-    }];
-
-}];</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 选择字幕&#x2F;音轨  </span><br><span class="line"></span><br><span class="line">在视频加载完毕后，可以读取字幕、音轨资源</span><br></pre></td></tr></table></figure>
+<p> weak(self)<br>_endTimeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:AVPlayerItemDidPlayToEndTimeNotification object:self.playerItem queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {<br>       //播放完了可以调到开始<br>        [weak_self.videoPlayer seekToTime:kCMTimeZero completionHandler:^(BOOL finished) {<br>            block();<br>        }];</p>
+<p> }];</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 选择字幕&#x2F;音轨  </span><br><span class="line"></span><br><span class="line">在视频加载完毕后，可以读取字幕、音轨资源</span><br></pre></td></tr></table></figure>
 <p>可以在 第一节第2小节的KVC监听里执行</p>
 <ul>
 <li><p>(void)loadMediaOption:(void (^) (NSMutableArray *legibles, NSMutableArray *audibles)) getCompleteBlock {</p>
@@ -307,14 +303,10 @@ __block NSMutableArray *images = [NSMutableArray array];
     }
 
 }];</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 四、AirPlay的坑</span><br><span class="line"></span><br><span class="line">教材中介绍的AirPlay很简单，MPVolumeView，这个不大好用</span><br></pre></td></tr></table></figure>
-<pre><code>self.airPlayView = [[MPVolumeView alloc] init];
-self.airPlayView.showsVolumeSlider = NO;
-self.airPlayView.showsRouteButton = YES;</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">然后就可以把airPlayView添加到view上了。实践发现没法监听和操作视频的结束，看API，通知都废弃了，网上搜了下，发现iOS11新出了AVRoutePickerView，试了下效果拔群。</span><br></pre></td></tr></table></figure>
-<pre><code>self.airPlayViewUp11 = [[AVRoutePickerView alloc]initWithFrame:CGRectMake(100, 100, 60, 60)];
-//活跃状态颜色
-self.airPlayViewUp11.activeTintColor = [UIColor redColor];
-//设置代理
-self.airPlayViewUp11.delegate = self;</code></pre><p>```</p>
+<p>self.airPlayView = [[MPVolumeView alloc] init];<br>self.airPlayView.showsVolumeSlider = NO;<br>self.airPlayView.showsRouteButton = YES;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">然后就可以把airPlayView添加到view上了。实践发现没法监听和操作视频的结束，看API，通知都废弃了，网上搜了下，发现iOS11新出了AVRoutePickerView，试了下效果拔群。</span><br></pre></td></tr></table></figure>
+<p> self.airPlayViewUp11 = [[AVRoutePickerView alloc]initWithFrame:CGRectMake(100, 100, 60, 60)];<br>        //活跃状态颜色<br>self.airPlayViewUp11.activeTintColor = [UIColor redColor];<br>        //设置代理<br> self.airPlayViewUp11.delegate = self;</p>
+<p>```</p>
 <p>AirPlay可研究的地方太多了，后面需要花时间集中研究下。</p>
 
       
