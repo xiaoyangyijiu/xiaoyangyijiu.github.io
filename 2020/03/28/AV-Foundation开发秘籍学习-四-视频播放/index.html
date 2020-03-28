@@ -16,7 +16,7 @@
 <meta property="og:description" content="零、CMTime的转换在媒体播放的世界里，一向有精度的要求，而我们平时在开发中使用的单位一般是NSTimeInterval，而浮点数的运算，是存在精度损失的，对于视频播放、控制而言，是一种灾难，教材中介绍的比较简单，这里搜索资料，做个总结：">
 <meta property="og:locale" content="cn">
 <meta property="article:published_time" content="2020-03-28T01:30:34.000Z">
-<meta property="article:modified_time" content="2020-03-28T01:45:36.388Z">
+<meta property="article:modified_time" content="2020-03-28T03:13:24.622Z">
 <meta property="article:author" content="紫夜先生的博客">
 <meta property="article:tag" content="iOS">
 <meta property="article:tag" content="开发技术">
@@ -170,143 +170,84 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="零、CMTime的转换"><a href="#零、CMTime的转换" class="headerlink" title="零、CMTime的转换"></a>零、CMTime的转换</h1><p>在媒体播放的世界里，一向有精度的要求，而我们平时在开发中使用的单位一般是<code>NSTimeInterval</code>，而浮点数的运算，是存在精度损失的，对于视频播放、控制而言，是一种灾难，教材中介绍的比较简单，这里搜索资料，做个总结：  </p>
-<a id="more"></a>  
+<a id="more"></a>
 
 <h3 id="1-CMTime的定义"><a href="#1-CMTime的定义" class="headerlink" title="1.CMTime的定义"></a>1.CMTime的定义</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">typedef struct</span><br><span class="line">&#123;</span><br><span class="line">	CMTimeValue	value;		&#x2F;*! @field value The value of the CMTime. value&#x2F;timescale &#x3D; seconds. *&#x2F;</span><br><span class="line">	CMTimeScale	timescale;	&#x2F;*! @field timescale The timescale of the CMTime. value&#x2F;timescale &#x3D; seconds.  *&#x2F;</span><br><span class="line">	CMTimeFlags	flags;		&#x2F;*! @field flags The flags, eg. kCMTimeFlags_Valid, kCMTimeFlags_PositiveInfinity, etc. *&#x2F;</span><br><span class="line">	CMTimeEpoch	epoch;		&#x2F;*! @field epoch Differentiates between equal timestamps that are actually different because</span><br><span class="line">												 of looping, multi-item sequencing, etc.  </span><br><span class="line">												 Will be used during comparison: greater epochs happen after lesser ones. </span><br><span class="line">												 Additions&#x2F;subtraction is only possible within a single epoch,</span><br><span class="line">												 however, since epoch length may be unknown&#x2F;variable. *&#x2F;</span><br><span class="line">&#125; CMTime</span><br></pre></td></tr></table></figure>
 
-<p>该结构体常用的就俩值，一个<code>value</code>一个<code>timescale</code>。因此围绕构造CMTime的时候出现了衍生： </p>
+<p>该结构体常用的就俩值，一个<code>value</code>一个<code>timescale</code>。因此围绕构造CMTime的时候出现了衍生：</p>
 <h3 id="2-CMTime的使用"><a href="#2-CMTime的使用" class="headerlink" title="2.CMTime的使用"></a>2.CMTime的使用</h3><ul>
 <li>通过帧数构造</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    CMTime a &#x3D; CMTimeMake(1, 2);</span><br><span class="line">&#96;&#96;&#96;    </span><br><span class="line"></span><br><span class="line">这行代码的意思就是我想创建个0.5s的CMTime, value表示当前第1帧，timescale表示每秒钟有2帧，所以播放到当前帧就需要消耗0.5s。</span><br></pre></td></tr></table></figure>
-<pre><code>CMTime b = CMTimeMake(100, 44100);</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">同理，对于一个 44.1 kHz 的视频， b就是播放到第100帧的时候，消耗的时间</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- 通过NSTimeInterval构造  </span><br><span class="line"></span><br><span class="line">一般情况下，纠结于到底是播放1000帧的时间，还是1001帧的时间，似乎没有意义，我们更习惯于用s表达，于是出现了</span><br></pre></td></tr></table></figure>
-<pre><code>CMTime c = CMTimeMakeWithSeconds(0.5, 10);</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">与上面的CMTimeMake区别在于，CMTimeMakeWithSeconds的第一个参数接收的是float而非int(当然含义也不同)，上面代码就表示我想要个0.5s的时间，后面的参数表示的是每秒分割的“切片”(帧数)，就是步长，制约第一个参数，就是说在1s中可以分10份的情况下，我来个0.5s，也就是可以执行5帧的样子，为了理解举个反例：</span><br></pre></td></tr></table></figure>
-<pre><code>CMTime d = CMTimeMakeWithSeconds(0.5, 1);</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">1s中就能分成1份(帧)，你要执行0.5s是几个意思？就这点时间你一帧都执行不到，因此d最后是0。一次我们可以得到下面公式：</span><br></pre></td></tr></table></figure>
-<p>我们定义 frame = 1秒钟执行1帧消耗的时间 = 1/preferredTimescale</p>
-<p>使用CMTimeMakeWithSeconds时<br>    需 seconds  &gt;= frame<br>    且 实际得到时间 = [second /  frame]   *   frame<br>    * []向下取整</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  </span><br><span class="line">  </span><br><span class="line">- CMTime转NSTimeInterval  </span><br><span class="line"></span><br><span class="line">简单粗暴：</span><br></pre></td></tr></table></figure>
-<p>NSTimeInterval e = CMTimeGetSeconds(d);</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">  </span><br><span class="line"># 一、视频的播放</span><br><span class="line"> </span><br><span class="line">视频播放和展示是两码事儿。  </span><br><span class="line"></span><br><span class="line">因此想看片要分下面几步：  </span><br><span class="line"></span><br><span class="line">### 1.修心 —— 拿到视频资源</span><br></pre></td></tr></table></figure>
-<p>_asset = [AVAsset assetWithURL:path];</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 2.养性 —— 掌握视频资源的一切</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">我们起码得知道资源的持续时间，必要的媒体信息及字幕音轨之类的吧，而加载视频资源是一个异步的操作，由于AVFoundation的特性，因此需要进行监听，一旦加载好了资源，那就从资源里读信息准备搞事情</span><br></pre></td></tr></table></figure>
-<p>NSArray *keys = @[@”tracks”,@”duration”,@”commonMetadata”,@”availableMediaCharacteristicsWithMediaSelectionOptions”];</p>
-<p>self.playerItem = [AVPlayerItem playerItemWithAsset:_asset automaticallyLoadedAssetKeys:keys];</p>
-<p>[self.playerItem addObserver:self forKeyPath:@”status” options:0 context:&amp;PlayerItemStatusContext];</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">下面是对监听的实现：</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CMTime a &#x3D; CMTimeMake(1, 2);</span><br></pre></td></tr></table></figure>
+<p>这行代码的意思就是我想创建个0.5s的CMTime, value表示当前第1帧，timescale表示每秒钟有2帧，所以播放到当前帧就需要消耗0.5s。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CMTime b &#x3D; CMTimeMake(100, 44100);</span><br></pre></td></tr></table></figure>
+<p>同理，对于一个 44.1 kHz 的视频， b就是播放到第100帧的时候，消耗的时间</p>
 <ul>
-<li><p>(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary&lt;NSKeyValueChangeKey,id&gt; *)change context:(void *)context {</p>
-<p>  if (context == &amp;PlayerItemStatusContext) {</p>
-<pre><code>dispatch_async(dispatch_get_main_queue(), ^{
-    AVPlayerItem *playerItem = (AVPlayerItem *)object;
-    //移除KVO - 提上裤子不认账
-    [playerItem removeObserver:self forKeyPath:keyPath context:context];
+<li>通过NSTimeInterval构造</li>
+</ul>
+<p>一般情况下，纠结于到底是播放1000帧的时间，还是1001帧的时间，似乎没有意义，我们更习惯于用s表达，于是出现了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CMTime c &#x3D; CMTimeMakeWithSeconds(0.5, 10);</span><br></pre></td></tr></table></figure>
+<p>与上面的CMTimeMake区别在于，CMTimeMakeWithSeconds的第一个参数接收的是float而非int(当然含义也不同)，上面代码就表示我想要个0.5s的时间，后面的参数表示的是每秒分割的“切片”(帧数)，就是步长，制约第一个参数，就是说在1s中可以分10份的情况下，我来个0.5s，也就是可以执行5帧的样子，为了理解举个反例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CMTime d &#x3D; CMTimeMakeWithSeconds(0.5, 1);</span><br></pre></td></tr></table></figure>
+<p>1s中就能分成1份(帧)，你要执行0.5s是几个意思？就这点时间你一帧都执行不到，因此d最后是0。一次我们可以得到下面公式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">我们定义 frame &#x3D; 1秒钟执行1帧消耗的时间 &#x3D; 1&#x2F;preferredTimescale</span><br><span class="line"></span><br><span class="line">使用CMTimeMakeWithSeconds时</span><br><span class="line">    需 seconds  &gt;&#x3D; frame</span><br><span class="line">    且 实际得到时间 &#x3D; [second &#x2F;  frame]   *   frame</span><br><span class="line">    * []向下取整</span><br></pre></td></tr></table></figure>
 
-    if (playerItem.status == AVPlayerItemStatusReadyToPlay) {
-        if (self.readyPlayblock) {                    self.readyPlayblock(CMTimeGetSeconds(playerItem.duration), self-&gt;_asset.title ? self-&gt;_asset.title : self-&gt;_fileName);
-        }
-    }
-});</code></pre><p>  }<br>}</p>
+<ul>
+<li>CMTime转NSTimeInterval</li>
+</ul>
+<p>简单粗暴：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSTimeInterval e &#x3D; CMTimeGetSeconds(d);</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="一、视频的播放"><a href="#一、视频的播放" class="headerlink" title="一、视频的播放"></a>一、视频的播放</h1><p>视频播放和展示是两码事儿。</p>
+<p>因此想看片要分下面几步：</p>
+<h3 id="1-修心-——-拿到视频资源"><a href="#1-修心-——-拿到视频资源" class="headerlink" title="1.修心 —— 拿到视频资源"></a>1.修心 —— 拿到视频资源</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_asset &#x3D; [AVAsset assetWithURL:path];</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-养性-——-掌握视频资源的一切"><a href="#2-养性-——-掌握视频资源的一切" class="headerlink" title="2.养性 —— 掌握视频资源的一切"></a>2.养性 —— 掌握视频资源的一切</h3><p>我们起码得知道资源的持续时间，必要的媒体信息及字幕音轨之类的吧，而加载视频资源是一个异步的操作，由于AVFoundation的特性，因此需要进行监听，一旦加载好了资源，那就从资源里读信息准备搞事情</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">NSArray *keys &#x3D; @[@&quot;tracks&quot;,@&quot;duration&quot;,@&quot;commonMetadata&quot;,@&quot;availableMediaCharacteristicsWithMediaSelectionOptions&quot;];</span><br><span class="line"></span><br><span class="line">self.playerItem &#x3D; [AVPlayerItem playerItemWithAsset:_asset automaticallyLoadedAssetKeys:keys];</span><br><span class="line"></span><br><span class="line">[self.playerItem addObserver:self forKeyPath:@&quot;status&quot; options:0 context:&amp;PlayerItemStatusContext];</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary&lt;NSKeyValueChangeKey,id&gt; *)change context:(void *)context &#123;</span><br><span class="line"></span><br><span class="line">    if (context &#x3D;&#x3D; &amp;PlayerItemStatusContext) &#123;</span><br><span class="line"></span><br><span class="line">        dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">            AVPlayerItem *playerItem &#x3D; (AVPlayerItem *)object;</span><br><span class="line">            &#x2F;&#x2F;移除KVO - 提上裤子不认账</span><br><span class="line">            [playerItem removeObserver:self forKeyPath:keyPath context:context];</span><br><span class="line"></span><br><span class="line">            if (playerItem.status &#x3D;&#x3D; AVPlayerItemStatusReadyToPlay) &#123;</span><br><span class="line">                if (self.readyPlayblock) &#123;                    self.readyPlayblock(CMTimeGetSeconds(playerItem.duration), self-&gt;_asset.title ? self-&gt;_asset.title : self-&gt;_fileName);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-齐冠-——-把自己展示给世界"><a href="#3-齐冠-——-把自己展示给世界" class="headerlink" title="3.齐冠 —— 把自己展示给世界"></a>3.齐冠 —— 把自己展示给世界</h3><p>人靠衣裳马靠鞍，视频终归是给人看的，而playerItem本身是没有view，因此搞出了AVPlayer，AVPlayer有个弟弟，可以拿到它的layer层，把layer层扔到我们展示区域的视图的layer上就可以了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">self.videoPlayer &#x3D; [AVPlayer playerWithPlayerItem:self.playerItem];</span><br><span class="line">AVPlayerLayer *playerLayer &#x3D; [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];</span><br><span class="line">[view.layer addSublayer:playerLayer];</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h1 id="二、播放的控制"><a href="#二、播放的控制" class="headerlink" title="二、播放的控制"></a>二、播放的控制</h1><p>AVPlayer这个玩意主要还是处理播放控制的</p>
+<h3 id="1-播放与暂停"><a href="#1-播放与暂停" class="headerlink" title="1.播放与暂停"></a>1.播放与暂停</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[self.videoPlayer play];</span><br><span class="line">[self.videoPlayer pause];</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-倍速发现新世界"><a href="#2-倍速发现新世界" class="headerlink" title="2.倍速发现新世界"></a>2.倍速发现新世界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[self.videoPlayer setRate:0.0f];</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-跳到指定时间播放"><a href="#3-跳到指定时间播放" class="headerlink" title="3.跳到指定时间播放"></a>3.跳到指定时间播放</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[self.videoPlayer seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) completionHandler:^(BOOL finished) &#123;</span><br><span class="line">  &#x2F;&#x2F;搞事情</span><br><span class="line">  &#125;];</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-监听播放进度与播放结束"><a href="#4-监听播放进度与播放结束" class="headerlink" title="4.监听播放进度与播放结束"></a>4.监听播放进度与播放结束</h3><ul>
+<li><p>播放进度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CMTime intervalCM &#x3D; CMTimeMakeWithSeconds(interval, NSEC_PER_SEC);</span><br><span class="line"> weak(self)</span><br><span class="line"> _timeObserver &#x3D; [self.videoPlayer addPeriodicTimeObserverForInterval:intervalCM queue:dispatch_get_main_queue() usingBlock:^(CMTime time) &#123;</span><br><span class="line">     NSTimeInterval currentTime &#x3D; CMTimeGetSeconds(time);</span><br><span class="line">     NSTimeInterval duration &#x3D; CMTimeGetSeconds(weak_self.playerItem.duration);</span><br><span class="line">     &#x2F;&#x2F;拿到了当前时间，及总时间</span><br><span class="line"> &#125;];</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>播放结束</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 3.齐冠 —— 把自己展示给世界</span><br><span class="line"></span><br><span class="line">人靠衣裳马靠鞍，视频终归是给人看的，而playerItem本身是没有view，因此搞出了AVPlayer，AVPlayer有个弟弟，可以拿到它的layer层，把layer层扔到我们展示区域的视图的layer上就可以了</span><br></pre></td></tr></table></figure>
-<p>self.videoPlayer = [AVPlayer playerWithPlayerItem:self.playerItem];</p>
-<p>AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];</p>
-<p>[view.layer addSublayer:playerLayer];</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 二、播放的控制</span><br><span class="line"></span><br><span class="line">AVPlayer这个玩意主要还是处理播放控制的</span><br><span class="line"></span><br><span class="line">### 1.播放与暂停</span><br></pre></td></tr></table></figure>
-<p> [self.videoPlayer play];<br> [self.videoPlayer pause];</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 2.倍速发现新世界</span><br></pre></td></tr></table></figure>
-<p> [self.videoPlayer setRate:0.0f];</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 3.跳到指定时间播放</span><br></pre></td></tr></table></figure>
-<p>[self.videoPlayer seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) completionHandler:^(BOOL finished) {<br>    //搞事情<br>    }];</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 4.监听播放进度与播放结束</span><br><span class="line"></span><br><span class="line">- 播放进度</span><br></pre></td></tr></table></figure>
-<p>   CMTime intervalCM = CMTimeMakeWithSeconds(interval, NSEC_PER_SEC);<br>    weak(self)<br>    _timeObserver = [self.videoPlayer addPeriodicTimeObserverForInterval:intervalCM queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {<br>        NSTimeInterval currentTime = CMTimeGetSeconds(time);<br>        NSTimeInterval duration = CMTimeGetSeconds(weak_self.playerItem.duration);<br>        //拿到了当前时间，及总时间<br>    }];</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 播放结束</span><br></pre></td></tr></table></figure>
-<p> weak(self)<br>_endTimeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:AVPlayerItemDidPlayToEndTimeNotification object:self.playerItem queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {<br>       //播放完了可以调到开始<br>        [weak_self.videoPlayer seekToTime:kCMTimeZero completionHandler:^(BOOL finished) {<br>            block();<br>        }];</p>
-<p> }];</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 选择字幕&#x2F;音轨  </span><br><span class="line"></span><br><span class="line">在视频加载完毕后，可以读取字幕、音轨资源</span><br></pre></td></tr></table></figure>
-<p>可以在 第一节第2小节的KVC监听里执行</p>
-<ul>
-<li><p>(void)loadMediaOption:(void (^) (NSMutableArray *legibles, NSMutableArray *audibles)) getCompleteBlock {</p>
-<p>  NSArray *mediaCharacteristics = _asset.availableMediaCharacteristicsWithMediaSelectionOptions;</p>
-<p>  NSString *legible = @”AVMediaCharacteristicLegible”;<br>  NSString *audible = @”AVMediaCharacteristicAudible”;<br>  NSMutableArray *legibleArray = [NSMutableArray array];<br>  NSMutableArray *audibleArray = [NSMutableArray array];</p>
-<p>  for (NSString *characteristic in mediaCharacteristics) {</p>
-<pre><code>AVMediaSelectionGroup *group = [_asset mediaSelectionGroupForMediaCharacteristic:characteristic];</code></pre></li>
-</ul>
-<pre><code>    for (AVMediaSelectionOption *option in group.options) {
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">weak(self)</span><br><span class="line">_endTimeObserver &#x3D; [[NSNotificationCenter defaultCenter] addObserverForName:AVPlayerItemDidPlayToEndTimeNotification object:self.playerItem queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) &#123;</span><br><span class="line">   &#x2F;&#x2F;播放完了可以调到开始</span><br><span class="line">    [weak_self.videoPlayer seekToTime:kCMTimeZero completionHandler:^(BOOL finished) &#123;</span><br><span class="line">        block();</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
 
-        if ([characteristic isEqualToString:legible]) {
-            [legibleArray addObject:option.displayName];
-        }else if ([characteristic isEqualToString:audible]) {
-            [audibleArray addObject:option.displayName];
-        }
-    }
-}
-if (getCompleteBlock) {
-    getCompleteBlock(legibleArray,audibleArray);
-}</code></pre><p>}</p>
-<p>//根据loadMediaOption中拿到的字幕名称，进行选择设置</p>
-<ul>
-<li><p>(void)selectLegible:(NSString *)legible {</p>
-<p>  AVMediaSelectionGroup *group = [_asset mediaSelectionGroupForMediaCharacteristic:@”AVMediaCharacteristicLegible”];</p>
-<p>  BOOL selected = NO;<br>  for (AVMediaSelectionOption *option in group.options) {</p>
-<pre><code>if ([option.displayName isEqualToString:legible]) {
-    [self.playerItem selectMediaOption:option inMediaSelectionGroup:group];
-    selected = YES;
-    break;
-}</code></pre><p>  }<br>  if (!selected) {</p>
-<pre><code>[self.playerItem selectMediaOption:nil inMediaSelectionGroup:group];</code></pre><p>  }</p>
-</li>
-</ul>
-<p>}<br>//根据loadMediaOption中拿到的音轨名称，进行选择设置</p>
-<ul>
-<li><p>(void)selectAudible:(NSString *)audible {</p>
-<p>  AVMediaSelectionGroup *group = [_asset mediaSelectionGroupForMediaCharacteristic:@”AVMediaCharacteristicAudible”];</p>
-<p>  BOOL selected = NO;<br>  for (AVMediaSelectionOption *option in group.options) {</p>
-<pre><code>if ([option.displayName isEqualToString:audible]) {
-    [self.playerItem selectMediaOption:option inMediaSelectionGroup:group];
-    selected = YES;
-    break;
-}</code></pre><p>  }<br>  if (!selected) {</p>
-<pre><code>[self.playerItem selectMediaOption:nil inMediaSelectionGroup:group];</code></pre><p>  }</p>
-</li>
-</ul>
-<p>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"># 三、视频快照的生成</span><br><span class="line"></span><br><span class="line">生成快照有两种方式:  </span><br><span class="line"></span><br><span class="line">### 1.在指定时间生成</span><br></pre></td></tr></table></figure>
-<pre><code>self.imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:_asset];
-CGImageRef ref = [self.imageGenerator copyCGImageAtTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) actualTime:nil error:nil];
-UIImage *image = [UIImage imageWithCGImage:ref];//拿到图片</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 2.根据时间点序列生成快照序列</span><br></pre></td></tr></table></figure>
-<pre><code>self.imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:_asset];
-self.imageGenerator.maximumSize = CGSizeMake(width, 0);//限定宽。高度自适应
+<h3 id="选择字幕-音轨"><a href="#选择字幕-音轨" class="headerlink" title="选择字幕/音轨"></a>选择字幕/音轨</h3><p>在视频加载完毕后，可以读取字幕、音轨资源</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">可以在 第一节第2小节的KVC监听里执行</span><br><span class="line">- (void)loadMediaOption:(void (^) (NSMutableArray *legibles, NSMutableArray *audibles)) getCompleteBlock &#123;</span><br><span class="line"></span><br><span class="line">    NSArray *mediaCharacteristics &#x3D; _asset.availableMediaCharacteristicsWithMediaSelectionOptions;</span><br><span class="line"></span><br><span class="line">    NSString *legible &#x3D; @&quot;AVMediaCharacteristicLegible&quot;;</span><br><span class="line">    NSString *audible &#x3D; @&quot;AVMediaCharacteristicAudible&quot;;</span><br><span class="line">    NSMutableArray *legibleArray &#x3D; [NSMutableArray array];</span><br><span class="line">    NSMutableArray *audibleArray &#x3D; [NSMutableArray array];</span><br><span class="line"></span><br><span class="line">    for (NSString *characteristic in mediaCharacteristics) &#123;</span><br><span class="line"></span><br><span class="line">        AVMediaSelectionGroup *group &#x3D; [_asset mediaSelectionGroupForMediaCharacteristic:characteristic];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        for (AVMediaSelectionOption *option in group.options) &#123;</span><br><span class="line"></span><br><span class="line">            if ([characteristic isEqualToString:legible]) &#123;</span><br><span class="line">                [legibleArray addObject:option.displayName];</span><br><span class="line">            &#125;else if ([characteristic isEqualToString:audible]) &#123;</span><br><span class="line">                [audibleArray addObject:option.displayName];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (getCompleteBlock) &#123;</span><br><span class="line">        getCompleteBlock(legibleArray,audibleArray);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;根据loadMediaOption中拿到的字幕名称，进行选择设置</span><br><span class="line">- (void)selectLegible:(NSString *)legible &#123;</span><br><span class="line"></span><br><span class="line">    AVMediaSelectionGroup *group &#x3D; [_asset mediaSelectionGroupForMediaCharacteristic:@&quot;AVMediaCharacteristicLegible&quot;];</span><br><span class="line"></span><br><span class="line">    BOOL selected &#x3D; NO;</span><br><span class="line">    for (AVMediaSelectionOption *option in group.options) &#123;</span><br><span class="line">        if ([option.displayName isEqualToString:legible]) &#123;</span><br><span class="line">            [self.playerItem selectMediaOption:option inMediaSelectionGroup:group];</span><br><span class="line">            selected &#x3D; YES;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (!selected) &#123;</span><br><span class="line">        [self.playerItem selectMediaOption:nil inMediaSelectionGroup:group];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;根据loadMediaOption中拿到的音轨名称，进行选择设置</span><br><span class="line">- (void)selectAudible:(NSString *)audible &#123;</span><br><span class="line"></span><br><span class="line">    AVMediaSelectionGroup *group &#x3D; [_asset mediaSelectionGroupForMediaCharacteristic:@&quot;AVMediaCharacteristicAudible&quot;];</span><br><span class="line"></span><br><span class="line">    BOOL selected &#x3D; NO;</span><br><span class="line">    for (AVMediaSelectionOption *option in group.options) &#123;</span><br><span class="line">        if ([option.displayName isEqualToString:audible]) &#123;</span><br><span class="line">            [self.playerItem selectMediaOption:option inMediaSelectionGroup:group];</span><br><span class="line">            selected &#x3D; YES;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (!selected) &#123;</span><br><span class="line">        [self.playerItem selectMediaOption:nil inMediaSelectionGroup:group];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-// 根据NSNumber的时间数组 构造NSValue时间数组
-NSMutableArray *valueTimes = [NSMutableArray array];
-for (NSNumber *n in times) {
-     CMTime nCM = CMTimeMakeWithSeconds(n.floatValue, NSEC_PER_SEC);
-    [valueTimes addObject:[NSValue valueWithCMTime:nCM]];
-}
 
-__block NSUInteger imageCount = valueTimes.count;
-__block NSMutableArray *images = [NSMutableArray array];
-[self.imageGenerator generateCGImagesAsynchronouslyForTimes:valueTimes completionHandler:^(CMTime requestedTime, CGImageRef  _Nullable image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError * _Nullable error) {
-    //每生成一张，便执行该回调
-    if (result == AVAssetImageGeneratorSucceeded) {
-        VNLog(@&quot;请求的快照时间:%f&quot;,CMTimeGetSeconds(requestedTime));
-        VNLog(@&quot;实际的生成时间：%f&quot;,CMTimeGetSeconds(actualTime));
-        UIImage *imageR = [UIImage imageWithCGImage:image];
-        [images addObject:imageR];
-    }
+<h1 id="三、视频快照的生成"><a href="#三、视频快照的生成" class="headerlink" title="三、视频快照的生成"></a>三、视频快照的生成</h1><p>生成快照有两种方式:</p>
+<h3 id="1-在指定时间生成"><a href="#1-在指定时间生成" class="headerlink" title="1.在指定时间生成"></a>1.在指定时间生成</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">self.imageGenerator &#x3D; [AVAssetImageGenerator assetImageGeneratorWithAsset:_asset];</span><br><span class="line">CGImageRef ref &#x3D; [self.imageGenerator copyCGImageAtTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) actualTime:nil error:nil];</span><br><span class="line">UIImage *image &#x3D; [UIImage imageWithCGImage:ref];&#x2F;&#x2F;拿到图片</span><br></pre></td></tr></table></figure>
 
-    if (--imageCount == 0) {
-        if (completeBlock) {
-            completeBlock(images);
-        }
-    }
+<h3 id="2-根据时间点序列生成快照序列"><a href="#2-根据时间点序列生成快照序列" class="headerlink" title="2.根据时间点序列生成快照序列"></a>2.根据时间点序列生成快照序列</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">self.imageGenerator &#x3D; [AVAssetImageGenerator assetImageGeneratorWithAsset:_asset];</span><br><span class="line">self.imageGenerator.maximumSize &#x3D; CGSizeMake(width, 0);&#x2F;&#x2F;限定宽。高度自适应</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 根据NSNumber的时间数组 构造NSValue时间数组</span><br><span class="line">NSMutableArray *valueTimes &#x3D; [NSMutableArray array];</span><br><span class="line">for (NSNumber *n in times) &#123;</span><br><span class="line">     CMTime nCM &#x3D; CMTimeMakeWithSeconds(n.floatValue, NSEC_PER_SEC);</span><br><span class="line">    [valueTimes addObject:[NSValue valueWithCMTime:nCM]];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__block NSUInteger imageCount &#x3D; valueTimes.count;</span><br><span class="line">__block NSMutableArray *images &#x3D; [NSMutableArray array];</span><br><span class="line">[self.imageGenerator generateCGImagesAsynchronouslyForTimes:valueTimes completionHandler:^(CMTime requestedTime, CGImageRef  _Nullable image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError * _Nullable error) &#123;</span><br><span class="line">    &#x2F;&#x2F;每生成一张，便执行该回调</span><br><span class="line">    if (result &#x3D;&#x3D; AVAssetImageGeneratorSucceeded) &#123;</span><br><span class="line">        VNLog(@&quot;请求的快照时间:%f&quot;,CMTimeGetSeconds(requestedTime));</span><br><span class="line">        VNLog(@&quot;实际的生成时间：%f&quot;,CMTimeGetSeconds(actualTime));</span><br><span class="line">        UIImage *imageR &#x3D; [UIImage imageWithCGImage:image];</span><br><span class="line">        [images addObject:imageR];</span><br><span class="line">    &#125;</span><br><span class="line">    if (--imageCount &#x3D;&#x3D; 0) &#123;</span><br><span class="line">        if (completeBlock) &#123;</span><br><span class="line">            completeBlock(images);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
 
-}];</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 四、AirPlay的坑</span><br><span class="line"></span><br><span class="line">教材中介绍的AirPlay很简单，MPVolumeView，这个不大好用</span><br></pre></td></tr></table></figure>
-<p>self.airPlayView = [[MPVolumeView alloc] init];<br>self.airPlayView.showsVolumeSlider = NO;<br>self.airPlayView.showsRouteButton = YES;</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">然后就可以把airPlayView添加到view上了。实践发现没法监听和操作视频的结束，看API，通知都废弃了，网上搜了下，发现iOS11新出了AVRoutePickerView，试了下效果拔群。</span><br></pre></td></tr></table></figure>
-<p> self.airPlayViewUp11 = [[AVRoutePickerView alloc]initWithFrame:CGRectMake(100, 100, 60, 60)];<br>        //活跃状态颜色<br>self.airPlayViewUp11.activeTintColor = [UIColor redColor];<br>        //设置代理<br> self.airPlayViewUp11.delegate = self;</p>
-<p>```</p>
+
+
+<h1 id="四、AirPlay的坑"><a href="#四、AirPlay的坑" class="headerlink" title="四、AirPlay的坑"></a>四、AirPlay的坑</h1><p>教材中介绍的AirPlay很简单，MPVolumeView，这个不大好用  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">self.airPlayView &#x3D; [[MPVolumeView alloc] init];</span><br><span class="line">self.airPlayView.showsVolumeSlider &#x3D; NO;</span><br><span class="line">self.airPlayView.showsRouteButton &#x3D; YES;</span><br></pre></td></tr></table></figure>
+<p>然后就可以把airPlayView添加到view上了。实践发现没法监听和操作视频的结束，看API，通知都废弃了，网上搜了下，发现iOS11新出了AVRoutePickerView，试了下效果拔群。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">self.airPlayViewUp11 &#x3D; [[AVRoutePickerView alloc]initWithFrame:CGRectMake(100, 100, 60, 60)];</span><br><span class="line">&#x2F;&#x2F;活跃状态颜色</span><br><span class="line">self.airPlayViewUp11.activeTintColor &#x3D; [UIColor redColor];</span><br><span class="line">&#x2F;&#x2F;设置代理</span><br><span class="line">self.airPlayViewUp11.delegate &#x3D; self;</span><br></pre></td></tr></table></figure>
+
 <p>AirPlay可研究的地方太多了，后面需要花时间集中研究下。</p>
 
       
