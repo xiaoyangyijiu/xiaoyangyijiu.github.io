@@ -6,14 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | 紫夜先生的博客</title>
+  <title>AV Foundation开发秘籍学习(九)媒体的组合和编辑 | 紫夜先生的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="紫夜先生的博客">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+  <meta name="description" content="一、时间的处理1.CMTimeAVF处理媒体，为了精准，一般使用CMTime来表达时间：   123456typedef struct &amp;#123;    CMTimeValue value;     &#x2F;&#x2F;与timescale组成分数形式的时间，即 时间 &#x3D; value &#x2F; timescale;    CMTimeScale timescale;    CM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AV Foundation开发秘籍学习(九)媒体的组合和编辑">
+<meta property="og:url" content="http://yoursite.com/2020/09/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B9%9D-%E5%AA%92%E4%BD%93%E7%9A%84%E7%BB%84%E5%90%88%E5%92%8C%E7%BC%96%E8%BE%91/index.html">
 <meta property="og:site_name" content="紫夜先生的博客">
+<meta property="og:description" content="一、时间的处理1.CMTimeAVF处理媒体，为了精准，一般使用CMTime来表达时间：   123456typedef struct &amp;#123;    CMTimeValue value;     &#x2F;&#x2F;与timescale组成分数形式的时间，即 时间 &#x3D; value &#x2F; timescale;    CMTimeScale timescale;    CM">
 <meta property="og:locale" content="cn">
+<meta property="article:published_time" content="2020-09-06T11:45:58.000Z">
+<meta property="article:modified_time" content="2020-09-06T11:49:23.308Z">
 <meta property="article:author" content="紫夜先生的博客">
+<meta property="article:tag" content="iOS">
+<meta property="article:tag" content="开发技术">
+<meta property="article:tag" content="AV Foundation">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="紫夜先生的博客" type="application/atom+xml">
@@ -142,82 +149,121 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-AV-Foundation开发秘籍学习-九-媒体的组合和编辑" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/09/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%8D%81-%E6%B7%B7%E5%90%88%E9%9F%B3%E9%A2%91/" class="archive-article-date">
-  	<time datetime="2020-09-06T11:46:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-06</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/09/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%8D%81-%E6%B7%B7%E5%90%88%E9%9F%B3%E9%A2%91/">AV Foundation开发秘籍学习(十)混合音频</a>
+    <h1 class="article-title" itemprop="name">
+      AV Foundation开发秘籍学习(九)媒体的组合和编辑
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">iOS</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">开发技术</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">AV Foundation</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/09/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B9%9D-%E5%AA%92%E4%BD%93%E7%9A%84%E7%BB%84%E5%90%88%E5%92%8C%E7%BC%96%E8%BE%91/" class="archive-article-date">
+        
+        <a href="/2020/09/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B9%9D-%E5%AA%92%E4%BD%93%E7%9A%84%E7%BB%84%E5%90%88%E5%92%8C%E7%BC%96%E8%BE%91/" class="archive-article-date">
   	<time datetime="2020-09-06T11:45:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-06</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/09/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B9%9D-%E5%AA%92%E4%BD%93%E7%9A%84%E7%BB%84%E5%90%88%E5%92%8C%E7%BC%96%E8%BE%91/">AV Foundation开发秘籍学习(九)媒体的组合和编辑</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、时间的处理"><a href="#一、时间的处理" class="headerlink" title="一、时间的处理"></a>一、时间的处理</h1><h2 id="1-CMTime"><a href="#1-CMTime" class="headerlink" title="1.CMTime"></a>1.CMTime</h2><p>AVF处理媒体，为了精准，一般使用CMTime来表达时间：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">    CMTimeValue value;     &#x2F;&#x2F;与timescale组成分数形式的时间，即 时间 &#x3D; value &#x2F; timescale;</span><br><span class="line">    CMTimeScale timescale;</span><br><span class="line">    CMTimeFlags flags;</span><br><span class="line">    CMTimeEpoch epoch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>使用例子：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CMTime t1 &#x3D; CMTimeMake(3, 1); &#x2F;&#x2F; 3s</span><br><span class="line">CMTime t2 &#x3D; CMTimeMake(5000, 1000); &#x2F;&#x2F;5s</span><br><span class="line">CMTime result &#x3D; CMTimeAdd(t1, t2); &#x2F;&#x2F;相加</span><br><span class="line">CMTimeShow(result); &#x2F;&#x2F;&#123;8000&#x2F;1000 &#x3D; 8.000&#125;</span><br><span class="line">result &#x3D; CMTimeSubtract(t1, t2); &#x2F;&#x2F;相减</span><br><span class="line">CMTimeShow(result); &#x2F;&#x2F;&#123;-2000&#x2F;1000 &#x3D; -2.000&#125;</span><br></pre></td></tr></table></figure>
 
-        <div class="article-info info-on-right">
-          
+<h2 id="2-CMTimeRange"><a href="#2-CMTimeRange" class="headerlink" title="2.CMTimeRange"></a>2.CMTimeRange</h2><p>Core Media框架还为时间范围提供了一个数据类型，成为CMTimeRange:  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">typedef struct</span><br><span class="line">&#123;</span><br><span class="line">	CMTime start;		&#x2F;*! @field start The start time of the time range. *&#x2F;</span><br><span class="line">	CMTime duration;	&#x2F;*! @field duration The duration of the time range. *&#x2F;</span><br><span class="line">&#125; CMTimeRange</span><br></pre></td></tr></table></figure>
+<p>起始时间，持续时间，和NSRange类似。创建的方式有两种，一种是CMTimeRangeMake传入起始时间及持续时间；另一种是CMTimeRangeFromTimeToTime，传入起始时间及结束时间。使用示例：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CMTime t1 &#x3D; CMTimeMake(3, 1); &#x2F;&#x2F; 3s</span><br><span class="line">CMTime t2 &#x3D; CMTimeMake(5000, 1000); &#x2F;&#x2F;5s</span><br><span class="line">CMTimeRange timeRange &#x3D; CMTimeRangeMake(t1, t2);&#x2F;&#x2F;从3s的时间开始，持续5s</span><br><span class="line">CMTimeRangeShow(timeRange);&#x2F;&#x2F;&#123;&#123;3&#x2F;1 &#x3D; 3.000&#125;, &#123;5000&#x2F;1000 &#x3D; 5.000&#125;&#125;</span><br><span class="line">CMTimeRange timeRange2 &#x3D; CMTimeRangeFromTimeToTime(t1, t2);&#x2F;&#x2F;从3s的时间点开始，5s的时间点结束，持续2s</span><br><span class="line">CMTimeRangeShow(timeRange2);&#x2F;&#x2F;&#123;&#123;3&#x2F;1 &#x3D; 3.000&#125;, &#123;2000&#x2F;1000 &#x3D; 2.000&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>另外还有<code>CMTimeRangeGetIntersection</code>获取两个时间范围的∩，<code>CMTimeRangeGetUnion</code>获取两个时间范围的∪  </p>
+<h1 id="二、组合资源的基础方法"><a href="#二、组合资源的基础方法" class="headerlink" title="二、组合资源的基础方法"></a>二、组合资源的基础方法</h1><p>组合由轨道组成，一般分为视频轨道和音轨，主要步骤就是从源资源的轨道中抽出指定片段插入到组合下的轨道中。</p>
+<pre><code>//0.准备工作
+NSURL *url1 = [[NSBundle mainBundle] URLForResource:@&quot;video1&quot; withExtension:@&quot;mp4&quot;];
+NSURL *url2 = [[NSBundle mainBundle] URLForResource:@&quot;video2&quot; withExtension:@&quot;mp4&quot;];
+NSURL *url3 = [[NSBundle mainBundle] URLForResource:@&quot;audio&quot; withExtension:@&quot;mp3&quot;];
+NSDictionary *options = @{AVURLAssetPreferPreciseDurationAndTimingKey:@YES};//确保当资源的属性使用AVAsynchronousKeyValueLoading协议载入时可以计算出准确的时长和时间信息。
+NSArray *keys = @[@&quot;tracks&quot;,@&quot;duration&quot;,@&quot;commonMetadata&quot;];
+
+AVAsset *goldenGateAsset = [AVURLAsset URLAssetWithURL:url1 options:options];
+[goldenGateAsset loadValuesAsynchronouslyForKeys:keys completionHandler:^{
+
+}];
+AVAsset *teaGardenAsset = [AVURLAsset URLAssetWithURL:url2 options:options];
+[teaGardenAsset loadValuesAsynchronouslyForKeys:keys completionHandler:^{
+
+}];
+AVAsset *soundtrackAsset = [AVURLAsset URLAssetWithURL:url3 options:options];
+[soundtrackAsset loadValuesAsynchronouslyForKeys:keys completionHandler:^{
+
+}];
+//实际应该等3个异步回调执行完毕后再执行下面的代码
+//1.终极目标是构建一个composition组合
+AVMutableComposition *composition = [AVMutableComposition composition];
+//2.组合可以包含若干个轨道
+AVMutableCompositionTrack *videoTrack = [composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];//kCMPersistentTrackID_Invalid就当做一个默认值吧，可以理解为UIView的tag值
+AVMutableCompositionTrack *audioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];//kCMPersistentTrackID_Invalid会自动维护，可以理解为数据库中的主键自增
+//3.有了轨道之后，就是像轨道中增加片段
+CMTime cursorTime = kCMTimeZero;
+CMTime videoDuration = CMTimeMake(5, 1);
+CMTimeRange videoTimeRange = CMTimeRangeMake(kCMTimeZero, videoDuration); //抽取视频的时间范围
+AVAssetTrack *assetTrack;
+assetTrack = [[goldenGateAsset tracksWithMediaType:AVMediaTypeVideo] firstObject];//拿到源目标轨道。
+[videoTrack insertTimeRange:videoTimeRange ofTrack:assetTrack atTime:cursorTime error:nil];//手术刀：将goldenGateAsset的轨道视频的前5s作为了videoTrack的前5s
+cursorTime = CMTimeAdd(cursorTime, videoDuration);//游标指向第5s结束
+
+assetTrack = [[teaGardenAsset tracksWithMediaType:AVMediaTypeVideo] firstObject];//拿到源目标轨道。
+[videoTrack insertTimeRange:videoTimeRange ofTrack:assetTrack atTime:cursorTime error:nil];//手术刀：将goldenGateAsset的轨道视频的前5s作为了videoTrack的6~10s
+cursorTime = kCMTimeZero;//重置
+
+CMTime audioDuration = composition.duration;//获取当前组合总长
+CMTimeRange audioTimeRange = CMTimeRangeMake(kCMTimeZero, audioDuration);
+
+assetTrack = [[soundtrackAsset tracksWithMediaType:AVMediaTypeAudio] firstObject];//拿到源目标轨道。
+[audioTrack insertTimeRange:audioTimeRange ofTrack:assetTrack atTime:cursorTime error:nil];</code></pre><p>AVMutableComposition实际是一个Asset，因此可以根据其创建AVPlayerItem进行播放，创建AVAssetExportSession进行导出</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://raw.githubusercontent.com/xiaoyangyijiu/PictureBed/master/blogImg/AliPayIcon.JPG">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://raw.githubusercontent.com/xiaoyangyijiu/PictureBed/master/blogImg/WeChatPayIcon.JPG">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -237,378 +283,114 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/09/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B9%9D-%E5%AA%92%E4%BD%93%E7%9A%84%E7%BB%84%E5%90%88%E5%92%8C%E7%BC%96%E8%BE%91/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/30/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%85%AB-%E8%AF%BB%E5%8F%96%E5%92%8C%E5%86%99%E5%85%A5%E5%AA%92%E4%BD%93/" class="archive-article-date">
-  	<time datetime="2020-08-30T11:21:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-30</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2020/09/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%8D%81-%E6%B7%B7%E5%90%88%E9%9F%B3%E9%A2%91/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          AV Foundation开发秘籍学习(十)混合音频
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/30/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%85%AB-%E8%AF%BB%E5%8F%96%E5%92%8C%E5%86%99%E5%85%A5%E5%AA%92%E4%BD%93/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">AV-Foundation开发秘籍学习(八)读取和写入媒体</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/30/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%85%AB-%E8%AF%BB%E5%8F%96%E5%92%8C%E5%86%99%E5%85%A5%E5%AA%92%E4%BD%93/">AV-Foundation开发秘籍学习(八)读取和写入媒体</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">iOS</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">开发技术</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">AV Foundation</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/23/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B8%83-%E9%AB%98%E7%BA%A7%E6%8D%95%E6%8D%89%E5%8A%9F%E8%83%BD/" class="archive-article-date">
-  	<time datetime="2020-08-23T09:45:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/23/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B8%83-%E9%AB%98%E7%BA%A7%E6%8D%95%E6%8D%89%E5%8A%9F%E8%83%BD/">AV-Foundation开发秘籍学习(七)高级捕捉功能</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">iOS</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">开发技术</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">AV Foundation</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/04/05/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%85%AD-%E6%8D%95%E6%8D%89%E5%AA%92%E4%BD%93/" class="archive-article-date">
-  	<time datetime="2020-04-05T02:17:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-05</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/04/05/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%85%AD-%E6%8D%95%E6%8D%89%E5%AA%92%E4%BD%93/">AV-Foundation开发秘籍学习(六)捕捉媒体</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">iOS</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">开发技术</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">AV Foundation</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/03/28/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%BA%94-AV-Kit-%E7%94%A8%E6%B3%95/" class="archive-article-date">
-  	<time datetime="2020-03-28T01:30:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/03/28/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%BA%94-AV-Kit-%E7%94%A8%E6%B3%95/">AV-Foundation开发秘籍学习(五)AV Kit 用法</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">iOS</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">开发技术</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">AV Foundation</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/03/28/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/" class="archive-article-date">
-  	<time datetime="2020-03-28T01:30:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/03/28/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E8%A7%86%E9%A2%91%E6%92%AD%E6%94%BE/">AV-Foundation开发秘籍学习(四)视频播放</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">iOS</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">开发技术</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">AV Foundation</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/03/28/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E8%B5%84%E6%BA%90%E5%92%8C%E5%85%83%E6%95%B0%E6%8D%AE/" class="archive-article-date">
-  	<time datetime="2020-03-28T01:29:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/03/28/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E8%B5%84%E6%BA%90%E5%92%8C%E5%85%83%E6%95%B0%E6%8D%AE/">AV-Foundation开发秘籍学习(三)资源和元数据</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">iOS</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">开发技术</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">AV Foundation</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/03/15/%E6%B5%B7%E6%B7%98%E9%A6%96%E8%AE%B0/" class="archive-article-date">
-  	<time datetime="2020-03-15T10:47:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/03/15/%E6%B5%B7%E6%B7%98%E9%A6%96%E8%AE%B0/">海淘首记</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/03/15/%E5%8A%A8%E7%89%A9%E7%AE%A1%E7%90%86%E5%B1%80%E8%A7%82%E5%90%8E%E6%84%9F/" class="archive-article-date">
-  	<time datetime="2020-03-15T10:46:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/03/15/%E5%8A%A8%E7%89%A9%E7%AE%A1%E7%90%86%E5%B1%80%E8%A7%82%E5%90%8E%E6%84%9F/">动物管理局观后感</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">观影</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &amp;raquo;</a>
-    </nav>
   
 
 
@@ -632,8 +414,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

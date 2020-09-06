@@ -144,6 +144,167 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-AV-Foundation开发秘籍学习-十-混合音频" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/09/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%8D%81-%E6%B7%B7%E5%90%88%E9%9F%B3%E9%A2%91/">AV Foundation开发秘籍学习(十)混合音频</a>
+    </h1>
+  
+
+        
+        <a href="/2020/09/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%8D%81-%E6%B7%B7%E5%90%88%E9%9F%B3%E9%A2%91/" class="archive-article-date">
+  	<time datetime="2020-09-06T11:46:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>AVF提供了调整音频轨道声音大小的接口类：<code>AVAudioMix</code>。  </p>
+        
+          <a class="article-more-a" href="/2020/09/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%8D%81-%E6%B7%B7%E5%90%88%E9%9F%B3%E9%A2%91/#more">查看全文 >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">iOS</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">开发技术</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">AV Foundation</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-AV-Foundation开发秘籍学习-九-媒体的组合和编辑" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/09/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B9%9D-%E5%AA%92%E4%BD%93%E7%9A%84%E7%BB%84%E5%90%88%E5%92%8C%E7%BC%96%E8%BE%91/">AV Foundation开发秘籍学习(九)媒体的组合和编辑</a>
+    </h1>
+  
+
+        
+        <a href="/2020/09/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B9%9D-%E5%AA%92%E4%BD%93%E7%9A%84%E7%BB%84%E5%90%88%E5%92%8C%E7%BC%96%E8%BE%91/" class="archive-article-date">
+  	<time datetime="2020-09-06T11:45:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、时间的处理"><a href="#一、时间的处理" class="headerlink" title="一、时间的处理"></a>一、时间的处理</h1><h2 id="1-CMTime"><a href="#1-CMTime" class="headerlink" title="1.CMTime"></a>1.CMTime</h2><p>AVF处理媒体，为了精准，一般使用CMTime来表达时间：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">    CMTimeValue value;     &#x2F;&#x2F;与timescale组成分数形式的时间，即 时间 &#x3D; value &#x2F; timescale;</span><br><span class="line">    CMTimeScale timescale;</span><br><span class="line">    CMTimeFlags flags;</span><br><span class="line">    CMTimeEpoch epoch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2020/09/06/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E4%B9%9D-%E5%AA%92%E4%BD%93%E7%9A%84%E7%BB%84%E5%90%88%E5%92%8C%E7%BC%96%E8%BE%91/#more">查看全文 >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">iOS</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">开发技术</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">AV Foundation</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-AV-Foundation开发秘籍学习-八-读取和写入媒体" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -741,159 +902,6 @@
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">观影</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-被嫌弃的松子的一生读后感" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/15/%E8%A2%AB%E5%AB%8C%E5%BC%83%E7%9A%84%E6%9D%BE%E5%AD%90%E7%9A%84%E4%B8%80%E7%94%9F%E8%AF%BB%E5%90%8E%E6%84%9F/">被嫌弃的松子的一生读后感</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/15/%E8%A2%AB%E5%AB%8C%E5%BC%83%E7%9A%84%E6%9D%BE%E5%AD%90%E7%9A%84%E4%B8%80%E7%94%9F%E8%AF%BB%E5%90%8E%E6%84%9F/" class="archive-article-date">
-  	<time datetime="2020-03-15T02:49:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>　　出差被校长套路强奸，替同学龙洋一偷钱背黑锅而被开除，又怨恨父母更疼爱体弱多病的妹妹，一怒离家出走。</p>
-        
-          <a class="article-more-a" href="/2020/03/15/%E8%A2%AB%E5%AB%8C%E5%BC%83%E7%9A%84%E6%9D%BE%E5%AD%90%E7%9A%84%E4%B8%80%E7%94%9F%E8%AF%BB%E5%90%8E%E6%84%9F/#more">查看全文 >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">读书</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-那不勒斯四部曲读后感" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/07/%E9%82%A3%E4%B8%8D%E5%8B%92%E6%96%AF%E5%9B%9B%E9%83%A8%E6%9B%B2%E8%AF%BB%E5%90%8E%E6%84%9F/">那不勒斯四部曲读后感</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/07/%E9%82%A3%E4%B8%8D%E5%8B%92%E6%96%AF%E5%9B%9B%E9%83%A8%E6%9B%B2%E8%AF%BB%E5%90%8E%E6%84%9F/" class="archive-article-date">
-  	<time datetime="2020-03-07T05:26:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>　　“女人，远比女人自己了解的更复杂”  </p>
-<p>　　读完这部长篇后，我妄下了上面的定论。人和人，甚至不同时期的同一个人，对思想的认知是有差异的，于是，为了不让将来的我嘲笑现在的我，我决定修改上面那句话为：  </p>
-        
-          <a class="article-more-a" href="/2020/03/07/%E9%82%A3%E4%B8%8D%E5%8B%92%E6%96%AF%E5%9B%9B%E9%83%A8%E6%9B%B2%E8%AF%BB%E5%90%8E%E6%84%9F/#more">查看全文 >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">读书</a>
         		</li>
       		
 		</ul>
