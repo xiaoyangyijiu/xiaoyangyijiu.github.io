@@ -14,9 +14,9 @@
 <meta property="og:url" content="http://yoursite.com/2020/11/15/%E5%9F%BA%E4%BA%8E%E5%A0%86%E7%9A%84%E5%BC%B9%E7%AA%97-AlertView-%E7%AE%A1%E7%90%86%E5%99%A8/index.html">
 <meta property="og:site_name" content="紫夜先生的博客">
 <meta property="og:description" content="一、背景目前项目上使用自定制的AlertView，但弹窗缺乏管理，在处理某些业务场景时，往往需要额外的代码去处理，不够优雅。举一些的例子：场景1：  当前App页面已经存在一个弹窗，用户没有理会，后台无操作一段时间后回到前台，会触发超时弹窗，点击弹窗按钮触发登录逻辑，此时期望清除掉原有页面的弹窗。      场景2：  登录成功后，根据用户的个人情况(如身份证过期)弹出一些弹窗，同时可能存在一些营">
-<meta property="og:locale" content="cn">
+<meta property="og:locale">
 <meta property="article:published_time" content="2020-11-15T04:14:31.000Z">
-<meta property="article:modified_time" content="2020-11-15T04:27:25.497Z">
+<meta property="article:modified_time" content="2020-11-15T04:27:25.000Z">
 <meta property="article:author" content="紫夜先生的博客">
 <meta property="article:tag" content="iOS">
 <meta property="article:tag" content="开发技术">
@@ -39,7 +39,7 @@
 
   
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container" q-class="show:isCtnShow">
@@ -53,7 +53,7 @@
 			<img src="https://raw.githubusercontent.com/xiaoyangyijiu/PictureBed/master/blogImg/%E7%99%BD%E7%8C%AB.jpg" class="js-avatar">
 		</a>
 		<hgroup>
-		  <h1 class="header-author"><a href="/">紫夜先生的博客</a></h1>
+		  <h1 class="header-author"><a href="/"></a></h1>
 		</hgroup>
 		
 
@@ -103,7 +103,7 @@
 				<img src="https://raw.githubusercontent.com/xiaoyangyijiu/PictureBed/master/blogImg/%E7%99%BD%E7%8C%AB.jpg" class="js-avatar">
 			</div>
 			<hgroup>
-			  <h1 class="header-author js-header-author">紫夜先生的博客</h1>
+			  <h1 class="header-author js-header-author"></h1>
 			</hgroup>
 			
 			
@@ -177,7 +177,7 @@
 <blockquote>
 <p>登录成功后，根据用户的个人情况(如身份证过期)弹出一些弹窗，同时可能存在一些营销弹窗需要弹出。 </p>
 </blockquote>
-<a id="more"></a>
+<span id="more"></span>
 
 <h2 id="二、需求分析"><a href="#二、需求分析" class="headerlink" title="二、需求分析"></a>二、需求分析</h2><p>根据目前已知的场景，我们需要设计一个弹窗管理器来统一管理弹窗，其要具备以下能力：</p>
 <ul>
@@ -193,14 +193,14 @@
 <p>优先级 = 综合权重值 = 权重值 + 序列值 </p>
 </blockquote>
 <h3 id="2-可清理"><a href="#2-可清理" class="headerlink" title="2.可清理"></a>2.可清理</h3><p>依赖于堆的特性，我们可以很方便的清理堆中的元素，考虑到业务场景，我们可以为弹窗配置一个clearOther的选项，当点击该弹窗的按钮时，判断其clearOther，若为true，则清空堆。</p>
-<h3 id="3-弹窗与管理器解耦"><a href="#3-弹窗与管理器解耦" class="headerlink" title="3.弹窗与管理器解耦"></a>3.弹窗与管理器解耦</h3><p>在写demo时，使用了一个名为<a href="https://github.com/destinyzhao/DAlertView" target="_blank" rel="noopener">DAlertView</a>的简洁的开源弹窗，考虑到在应用时，往往项目都有自己的弹窗样式，因此使用了一个桥接类来实现弹窗与管理器的解耦，避免在做兼容修改时，不小心改动了管理逻辑。  </p>
+<h3 id="3-弹窗与管理器解耦"><a href="#3-弹窗与管理器解耦" class="headerlink" title="3.弹窗与管理器解耦"></a>3.弹窗与管理器解耦</h3><p>在写demo时，使用了一个名为<a target="_blank" rel="noopener" href="https://github.com/destinyzhao/DAlertView">DAlertView</a>的简洁的开源弹窗，考虑到在应用时，往往项目都有自己的弹窗样式，因此使用了一个桥接类来实现弹窗与管理器的解耦，避免在做兼容修改时，不小心改动了管理逻辑。  </p>
 <h2 id="四、实现"><a href="#四、实现" class="headerlink" title="四、实现"></a>四、实现</h2><p>本身利用堆的特性来做这个事情思路是比较清晰的，但在实践中，消耗时间最多的是处理线程问题，是的，没错，开发准则要求我们要在子线程处理数据，在主线程更新UI，那么就需要协调两个线程之间的关系，主要原则：  </p>
 <ul>
 <li>在子线程维护堆</li>
 <li>在准备弹窗前挂起子线程，待弹窗展示完毕后，载恢复</li>
 <li>弹窗准备消失前，阻塞主线程，维护堆，然后恢复主线程。这里牺牲了性能，但是目前没有想到更好的办法去处理快速点击时维护堆产生的错乱  </li>
 </ul>
-<h2 id="五、Demo"><a href="#五、Demo" class="headerlink" title="五、Demo"></a>五、Demo</h2><p>由于思路比较清晰，无甚难度，故没有画程序流程图(偷懒)。demo见<a href="https://gitee.com/glue-mobile-components/AlertView-Manager-iOS-Release" target="_blank" rel="noopener">地址</a>。</p>
+<h2 id="五、Demo"><a href="#五、Demo" class="headerlink" title="五、Demo"></a>五、Demo</h2><p>由于思路比较清晰，无甚难度，故没有画程序流程图(偷懒)。demo见<a target="_blank" rel="noopener" href="https://gitee.com/glue-mobile-components/AlertView-Manager-iOS-Release">地址</a>。</p>
 
       
 
@@ -323,6 +323,15 @@
   
 <nav id="article-nav">
   
+    <a href="/2021/04/23/2021%20%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          2021 新的开始
+        
+      </div>
+    </a>
+  
   
     <a href="/2020/09/13/AV-Foundation%E5%BC%80%E5%8F%91%E7%A7%98%E7%B1%8D%E5%AD%A6%E4%B9%A0-%E5%8D%81%E4%BA%8C-%E5%8A%A8%E7%94%BB%E5%9B%BE%E5%B1%82%E5%86%85%E5%AE%B9/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">AV Foundation开发秘籍学习(十二)动画图层内容</div>
@@ -368,7 +377,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2020 紫夜先生的博客
+    		&copy; 2021 紫夜先生的博客
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -451,7 +460,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">读书</a>
+                <a href="javascript:void(0)" class="js-tag color4">AV Foundation</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -463,11 +472,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">AV Foundation</a>
+                <a href="javascript:void(0)" class="js-tag color3">轮子</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">轮子</a>
+                <a href="javascript:void(0)" class="js-tag color3">读书</a>
               </li>
             
             <div class="clearfix"></div>
